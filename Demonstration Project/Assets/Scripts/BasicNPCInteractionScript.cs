@@ -11,6 +11,8 @@ public class BasicNPCInteractionScript : MonoBehaviour {
     private const int COUNTDOWN_START = 90;
     private bool clearBox = false;
 
+    public string TextToDisplay = "You are speaking to the NPC.";
+
     // Use this for initialization
     void Start()
     {
@@ -34,7 +36,7 @@ public class BasicNPCInteractionScript : MonoBehaviour {
     {
         if (collision.gameObject.tag == "InteractionCircle")
         {
-            textBoxObj.text = "You are speaking to the NPC.";
+            textBoxObj.text = TextToDisplay;
             countdown = COUNTDOWN_START;
             clearBox = true;
         }
