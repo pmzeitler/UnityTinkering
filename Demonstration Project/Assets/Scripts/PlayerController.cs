@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
-
+    public Transform interactionCircle;
     //private float velocity = 10;
 
     private bool useSticks = false;
@@ -18,16 +19,22 @@ public class PlayerController : MonoBehaviour
     private float velocityAccel = 1.5f;
 
     //Dead zone for movement. If an axis's absolute value is less than this, it will be treated as not moving.
-    private float axisDeadZone = 0.15f;
+    private const float AXIS_DEAD_ZONE = 0.15f;
+
+    private const float DIAGONAL_RATIO = 0.75f;
 
     private Vector2 currentAcceleration = new Vector2(0.0f, 0.0f);
 
     private Animator animator;
 
+    private bool canSpawnInteractor = true;
+
+    public Direction facingDirection { get; private set; }
+
     // Use this for initialization
     void Start ()
     {
-    
+        this.facingDirection = Direction.NORTH;
     }
 
     private void Awake()
@@ -42,6 +49,67 @@ public class PlayerController : MonoBehaviour
         float h = 0.0f;
         float v = 0.0f;
 
+        DetermineMovement(ref h, ref v);
+
+        bool movingHorizontal = ((h >= AXIS_DEAD_ZONE) || (h <= (0.0f - AXIS_DEAD_ZONE)));
+        bool movingVertical = ((v >= AXIS_DEAD_ZONE) || (v <= (0.0f - AXIS_DEAD_ZONE)));
+
+        AdjustFacing(h, v, movingHorizontal, movingVertical);
+
+        Vector2 newVelocity = new Vector2(this.GetComponent<Rigidbody2D>().velocity.x, this.GetComponent<Rigidbody2D>().velocity.y);
+
+        handleAccelDecel(movingHorizontal, h, ref newVelocity.x, ref currentAcceleration.x);
+        handleAccelDecel(movingVertical, v, ref newVelocity.y, ref currentAcceleration.y);
+
+        this.GetComponent<Rigidbody2D>().velocity = newVelocity;
+
+        if (Input.GetKeyDown(KeyCode.Space) && canSpawnInteractor)
+        {
+            Vector3 instantiateLocation = this.GetComponent<Transform>().position;
+            switch (facingDirection)
+            {
+                case Direction.NORTH:
+                    instantiateLocation.y += this.GetComponent<Collider2D>().bounds.size.y;
+                    break;
+                case Direction.SOUTH:
+                    instantiateLocation.y -= this.GetComponent<Collider2D>().bounds.size.y;
+                    break;
+                case Direction.EAST:
+                    instantiateLocation.x += this.GetComponent<Collider2D>().bounds.size.x;
+                    break;
+                case Direction.WEST:
+                    instantiateLocation.x -= this.GetComponent<Collider2D>().bounds.size.x;
+                    break;
+                case Direction.NORTHEAST:
+                    instantiateLocation.y += (this.GetComponent<Collider2D>().bounds.size.y * DIAGONAL_RATIO);
+                    instantiateLocation.x += (this.GetComponent<Collider2D>().bounds.size.x * DIAGONAL_RATIO);
+                    break;
+                case Direction.NORTHWEST:
+                    instantiateLocation.y += (this.GetComponent<Collider2D>().bounds.size.y * DIAGONAL_RATIO);
+                    instantiateLocation.x -= (this.GetComponent<Collider2D>().bounds.size.x * DIAGONAL_RATIO);
+                    break;
+                case Direction.SOUTHEAST:
+                    instantiateLocation.y -= (this.GetComponent<Collider2D>().bounds.size.y * DIAGONAL_RATIO);
+                    instantiateLocation.x += (this.GetComponent<Collider2D>().bounds.size.x * DIAGONAL_RATIO);
+                    break;
+                case Direction.SOUTHWEST:
+                    instantiateLocation.y -= (this.GetComponent<Collider2D>().bounds.size.y * DIAGONAL_RATIO);
+                    instantiateLocation.x -= (this.GetComponent<Collider2D>().bounds.size.x * DIAGONAL_RATIO);
+                    break;
+
+            } 
+            Instantiate(interactionCircle, instantiateLocation, Quaternion.identity);
+            canSpawnInteractor = false;
+        }
+
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            canSpawnInteractor = true;
+        }
+    }
+
+    private void DetermineMovement(ref float h, ref float v)
+    {
         if (useSticks)
         {
             h = Input.GetAxis("Horizontal");
@@ -67,11 +135,10 @@ public class PlayerController : MonoBehaviour
                 v = 1.0f;
             }
         }
+    }
 
-        bool movingHorizontal = ((h >= axisDeadZone) || (h <= (0.0f - axisDeadZone)));
-        bool movingVertical = ((v >= axisDeadZone) || (v <= (0.0f - axisDeadZone)));
-
-
+    private void AdjustFacing(float h, float v, bool movingHorizontal, bool movingVertical)
+    {
         string triggerName = "Moving_";
 
         if (movingHorizontal && !movingVertical)
@@ -79,11 +146,13 @@ public class PlayerController : MonoBehaviour
             if (h > 0)
             {
                 triggerName += "E";
-            } else
+            }
+            else
             {
                 triggerName += "W";
             }
-        } else if (!movingHorizontal && movingVertical)
+        }
+        else if (!movingHorizontal && movingVertical)
         {
             if (v > 0)
             {
@@ -93,7 +162,8 @@ public class PlayerController : MonoBehaviour
             {
                 triggerName += "S";
             }
-        } else if (movingHorizontal && movingVertical)
+        }
+        else if (movingHorizontal && movingVertical)
         {
             if (v > 0)
             {
@@ -112,7 +182,8 @@ public class PlayerController : MonoBehaviour
             {
                 triggerName += "W";
             }
-        } else
+        }
+        else
         {
             triggerName = null;
         }
@@ -120,22 +191,37 @@ public class PlayerController : MonoBehaviour
         if ((triggerName != null) && (triggerName != "Moving_"))
         {
             animator.SetTrigger(triggerName);
+            switch (triggerName)
+            {
+                case "Moving_N":
+                    facingDirection = Direction.NORTH;
+                    break;
+                case "Moving_NE":
+                    facingDirection = Direction.NORTHEAST;
+                    break;
+                case "Moving_E":
+                    facingDirection = Direction.EAST;
+                    break;
+                case "Moving_SE":
+                    facingDirection = Direction.SOUTHEAST;
+                    break;
+                case "Moving_S":
+                    facingDirection = Direction.SOUTH;
+                    break;
+                case "Moving_SW":
+                    facingDirection = Direction.SOUTHWEST;
+                    break;
+                case "Moving_W":
+                    facingDirection = Direction.WEST;
+                    break;
+                case "Moving_NW":
+                    facingDirection = Direction.NORTHWEST;
+                    break;
+                default:
+                    //do nothing;
+                    break;
+            }
         }
-
-        Vector2 newVelocity = new Vector2(this.GetComponent<Rigidbody2D>().velocity.x, this.GetComponent<Rigidbody2D>().velocity.y);
-
-        handleAccelDecel(movingHorizontal, h, ref newVelocity.x, ref currentAcceleration.x);
-        handleAccelDecel(movingVertical, v, ref newVelocity.y, ref currentAcceleration.y);
-
-        this.GetComponent<Rigidbody2D>().velocity = newVelocity;
-
-        /**
-        this.GetComponent<Rigidbody2D> ().velocity = new Vector2 (velocity * h, this.GetComponent<Rigidbody2D> ().velocity.y);
-
-        if (v != 0) {
-            this.GetComponent<Rigidbody2D> ().velocity = new Vector2 (this.GetComponent<Rigidbody2D> ().velocity.x, velocity * v);
-        }
-        **/
     }
 
     private void handleAccelDecel(bool moving, float direction, ref float currentVelocity, ref float acceleration)
