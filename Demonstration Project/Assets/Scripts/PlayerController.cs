@@ -28,8 +28,10 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
 
     private bool canSpawnInteractor = true;
+    private bool pauseKeyDown = false;
 
     public Direction facingDirection { get; private set; }
+    private PlayerData playerData;
 
     // Use this for initialization
     void Start ()
@@ -40,33 +42,65 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        playerData = PlayerData._instance;
+        Debug.Log("PlayerData instance is " + playerData);
     }
 
     // Update is called once per frame
-    void FixedUpdate ()
+    void FixedUpdate()
     {
-        // Cache the inputs.
-        float h = 0.0f;
-        float v = 0.0f;
+        if (playerData == null)
+        {
+            playerData = PlayerData._instance;
+            Debug.Log("PlayerData instance is " + playerData);
+        }
+        CheckPaused();
 
-        DetermineMovement(ref h, ref v);
+        if (!playerData.IsPaused)
+        {
+            // Cache the inputs.
+            float h = 0.0f;
+            float v = 0.0f;
 
-        bool movingHorizontal = ((h >= AXIS_DEAD_ZONE) || (h <= (0.0f - AXIS_DEAD_ZONE)));
-        bool movingVertical = ((v >= AXIS_DEAD_ZONE) || (v <= (0.0f - AXIS_DEAD_ZONE)));
+            DetermineMovement(ref h, ref v);
 
-        AdjustFacing(h, v, movingHorizontal, movingVertical);
+            bool movingHorizontal = ((h >= AXIS_DEAD_ZONE) || (h <= (0.0f - AXIS_DEAD_ZONE)));
+            bool movingVertical = ((v >= AXIS_DEAD_ZONE) || (v <= (0.0f - AXIS_DEAD_ZONE)));
 
-        Vector2 newVelocity = new Vector2(this.GetComponent<Rigidbody2D>().velocity.x, this.GetComponent<Rigidbody2D>().velocity.y);
+            AdjustFacing(h, v, movingHorizontal, movingVertical);
 
-        handleAccelDecel(movingHorizontal, h, ref newVelocity.x, ref currentAcceleration.x);
-        handleAccelDecel(movingVertical, v, ref newVelocity.y, ref currentAcceleration.y);
+            Vector2 newVelocity = new Vector2(this.GetComponent<Rigidbody2D>().velocity.x, this.GetComponent<Rigidbody2D>().velocity.y);
 
-        this.GetComponent<Rigidbody2D>().velocity = newVelocity;
+            handleAccelDecel(movingHorizontal, h, ref newVelocity.x, ref currentAcceleration.x);
+            handleAccelDecel(movingVertical, v, ref newVelocity.y, ref currentAcceleration.y);
 
+            this.GetComponent<Rigidbody2D>().velocity = newVelocity;
+
+            SpawnInteractorCheck();
+        }
+
+    }
+
+    private void CheckPaused()
+    {
+        if (Input.GetKeyDown(KeyCode.P) && !pauseKeyDown)
+        {
+            pauseKeyDown = true;
+            playerData.IsPaused = !playerData.IsPaused;
+        }
+
+        if (Input.GetKeyUp(KeyCode.P) && pauseKeyDown)
+        {
+            pauseKeyDown = false;
+        }
+    }
+
+    private void SpawnInteractorCheck()
+    {
         if (Input.GetKeyDown(KeyCode.Space) && canSpawnInteractor)
         {
             Vector3 instantiateLocation = this.GetComponent<Transform>().position;
-            switch (facingDirection)
+            switch (playerData.FacingDirection)
             {
                 case Direction.NORTH:
                     instantiateLocation.y += this.GetComponent<Collider2D>().bounds.size.y;
@@ -97,7 +131,7 @@ public class PlayerController : MonoBehaviour
                     instantiateLocation.x -= (this.GetComponent<Collider2D>().bounds.size.x * DIAGONAL_RATIO);
                     break;
 
-            } 
+            }
             Instantiate(interactionCircle, instantiateLocation, Quaternion.identity);
             canSpawnInteractor = false;
         }
@@ -222,6 +256,8 @@ public class PlayerController : MonoBehaviour
                     break;
             }
         }
+        playerData.MovingDirection = facingDirection;
+        playerData.FacingDirection = facingDirection;
     }
 
     private void handleAccelDecel(bool moving, float direction, ref float currentVelocity, ref float acceleration)
