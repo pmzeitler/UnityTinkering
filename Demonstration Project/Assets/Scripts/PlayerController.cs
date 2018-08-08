@@ -22,12 +22,19 @@ public class PlayerController : MonoBehaviour
 
     private Vector2 currentAcceleration = new Vector2(0.0f, 0.0f);
 
+    private Animator animator;
+
     // Use this for initialization
     void Start ()
     {
     
     }
-    
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
+
     // Update is called once per frame
     void FixedUpdate ()
     {
@@ -63,6 +70,57 @@ public class PlayerController : MonoBehaviour
 
         bool movingHorizontal = ((h >= axisDeadZone) || (h <= (0.0f - axisDeadZone)));
         bool movingVertical = ((v >= axisDeadZone) || (v <= (0.0f - axisDeadZone)));
+
+
+        string triggerName = "Moving_";
+
+        if (movingHorizontal && !movingVertical)
+        {
+            if (h > 0)
+            {
+                triggerName += "E";
+            } else
+            {
+                triggerName += "W";
+            }
+        } else if (!movingHorizontal && movingVertical)
+        {
+            if (v > 0)
+            {
+                triggerName += "N";
+            }
+            else
+            {
+                triggerName += "S";
+            }
+        } else if (movingHorizontal && movingVertical)
+        {
+            if (v > 0)
+            {
+                triggerName += "N";
+            }
+            else
+            {
+                triggerName += "S";
+            }
+
+            if (h > 0)
+            {
+                triggerName += "E";
+            }
+            else
+            {
+                triggerName += "W";
+            }
+        } else
+        {
+            triggerName = null;
+        }
+
+        if ((triggerName != null) && (triggerName != "Moving_"))
+        {
+            animator.SetTrigger(triggerName);
+        }
 
         Vector2 newVelocity = new Vector2(this.GetComponent<Rigidbody2D>().velocity.x, this.GetComponent<Rigidbody2D>().velocity.y);
 
