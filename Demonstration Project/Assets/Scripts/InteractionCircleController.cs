@@ -13,12 +13,12 @@ public class InteractionCircleController : MonoBehaviour {
 
     private void Awake()
     {
-        Destroy(gameObject, 3.0f);
+
     }
 
     // Update is called once per frame
     void Update () {
-		
-	}
+        Destroy(gameObject);
+    }
 
 }
