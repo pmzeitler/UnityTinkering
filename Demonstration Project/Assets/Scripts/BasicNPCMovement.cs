@@ -2,29 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicNPCMovement : MonoBehaviour {
+public class BasicNPCMovement : BaseControllerObject
+{
 
     private const int COUNTDOWN_MAX = 90;
     private int countdown = 0;
     private Direction direction = Direction.EAST;
-    private PlayerData playerData;
 
     public float SpeedPerFrame = 0.05f;
 
-	// Use this for initialization
-	void Awake () {
-        playerData = PlayerData._instance;
-	}
+    // Use this for initialization
+    protected override void Awake()
+    {
+        base.Awake();
+    }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
-        if (playerData == null)
-        {
-            playerData = PlayerData._instance;
-            Debug.Log("PlayerData instance is " + playerData);
-        }
-        if (!playerData.IsPaused)
+        base.Update();
+        if (!gameState.IsPaused)
         {
             Vector3 newPosition = gameObject.transform.position;
             countdown--;

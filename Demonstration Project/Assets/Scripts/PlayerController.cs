@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : BaseControllerObject
 {
     public Transform interactionCircle;
     //private float velocity = 10;
@@ -10,13 +10,13 @@ public class PlayerController : MonoBehaviour
     private bool useSticks = false;
 
     //This is the maximum velocity to permit the player to move in.
-    private float velocityMax = 10.0f;
+    public float velocityMax = 500.0f;
 
     //This is the amount by which to reduce the velocity by per frame.
-    private float velocityDecay = 1.0f;
+    private float velocityDecay = 10.0f;
 
     //This is how much the velocity delta increases each frame that movement persists in a direction.
-    private float velocityAccel = 1.5f;
+    private float velocityAccel = 15.0f;
 
     //Dead zone for movement. If an axis's absolute value is less than this, it will be treated as not moving.
     private const float AXIS_DEAD_ZONE = 0.15f;
@@ -31,7 +31,6 @@ public class PlayerController : MonoBehaviour
     private bool pauseKeyDown = false;
 
     public Direction facingDirection { get; private set; }
-    private PlayerData playerData;
 
     // Use this for initialization
     void Start ()
@@ -39,24 +38,25 @@ public class PlayerController : MonoBehaviour
         this.facingDirection = Direction.NORTH;
     }
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         animator = GetComponent<Animator>();
-        playerData = PlayerData._instance;
-        Debug.Log("PlayerData instance is " + playerData);
+        //Debug.Log("PlayerData instance is " + playerData);
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    protected override void FixedUpdate()
     {
+        base.FixedUpdate();
         if (playerData == null)
         {
-            playerData = PlayerData._instance;
+            playerData = PlayerDataManager._instance;
             Debug.Log("PlayerData instance is " + playerData);
         }
         CheckPaused();
 
-        if (!playerData.IsPaused)
+        if (!gameState.IsPaused)
         {
             // Cache the inputs.
             float h = 0.0f;
@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P) && !pauseKeyDown)
         {
             pauseKeyDown = true;
-            playerData.IsPaused = !playerData.IsPaused;
+            gameState.IsPaused = !gameState.IsPaused;
         }
 
         if (Input.GetKeyUp(KeyCode.P) && pauseKeyDown)

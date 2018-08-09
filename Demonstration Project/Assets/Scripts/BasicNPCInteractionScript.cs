@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BasicNPCInteractionScript : MonoBehaviour {
+public class BasicNPCInteractionScript : BaseControllerObject
+{
 
     public Text textBoxObj;
-
-    private PlayerData playerData;
 
     private int countdown = 0;
     private const int COUNTDOWN_START = 90;
@@ -16,19 +15,15 @@ public class BasicNPCInteractionScript : MonoBehaviour {
     public string TextToDisplay = "You are speaking to the NPC.";
 
     // Use this for initialization
-    void Awake()
+    protected override void Awake()
     {
-        playerData = PlayerData._instance;
+        base.Awake();
     }
 
-    void FixedUpdate()
+    protected override void FixedUpdate()
     {
-        if (playerData == null)
-        {
-            playerData = PlayerData._instance;
-            Debug.Log("PlayerData instance is " + playerData);
-        }
-        if (!playerData.IsPaused)
+        base.FixedUpdate();
+        if (!gameState.IsPaused)
         {
             if (countdown > 0)
             {
@@ -44,7 +39,7 @@ public class BasicNPCInteractionScript : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!playerData.IsPaused)
+        if (!gameState.IsPaused)
         {
             if (collision.gameObject.tag == "InteractionCircle")
             {

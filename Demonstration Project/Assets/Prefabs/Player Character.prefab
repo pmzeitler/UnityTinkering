@@ -38,8 +38,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1544887951866406}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -48.03, y: 53.99, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalPosition: {x: -838, y: 348, z: 0}
+  m_LocalScale: {x: 3, y: 3, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -63,7 +63,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!58 &58119050612095306
 CircleCollider2D:
   m_ObjectHideFlags: 1
@@ -110,7 +110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionCircle: {fileID: 4209872513499162, guid: 084d2bbb6b0a40d418f9d2551203c74c,
     type: 2}
-  textBoxObjIn: {fileID: 0}
+  velocityMax: 100
 --- !u!212 &212525186836765512
 SpriteRenderer:
   m_ObjectHideFlags: 1
