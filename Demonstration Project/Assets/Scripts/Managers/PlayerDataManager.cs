@@ -2,12 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerDataManager : MonoBehaviour {
+public class PlayerDataManager : ScriptableObject
+{
 
     public static PlayerDataManager _instance;
 
-    
-    
+    public static PlayerDataManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = ScriptableObject.CreateInstance<PlayerDataManager>();
+            }
+
+            return _instance;
+        }
+
+        private set
+        {
+            _instance = value;
+        }
+    }
+
     public Direction MovingDirection { get; set; }
     public Direction FacingDirection { get; set; }
 
@@ -19,13 +36,12 @@ public class PlayerDataManager : MonoBehaviour {
             Debug.Log("PlayerDataManager created");
             this.MovingDirection = Direction.NORTH;
             this.FacingDirection = Direction.NORTH;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
             if (_instance != this)
             {
-                Destroy(gameObject);
+                //do nothing;
             }
         }
 	}

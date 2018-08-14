@@ -2,9 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameStateManager : MonoBehaviour {
+public class GameStateManager : ScriptableObject
+{
 
-    public static GameStateManager _instance = null;
+    private static GameStateManager _instance = null;
+
+    public static GameStateManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = ScriptableObject.CreateInstance <GameStateManager>();
+            }
+
+            return _instance;
+        }
+
+        private set
+        {
+            _instance = value;
+        }
+    }
 
     public bool IsPaused { get; set; }
 
@@ -15,13 +34,12 @@ public class GameStateManager : MonoBehaviour {
             _instance = this;
             Debug.Log("GameStateManager created");
             this.IsPaused = false;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
             if (_instance != this)
             {
-                Destroy(gameObject);
+                //do nothing;
             }
         }
     }
