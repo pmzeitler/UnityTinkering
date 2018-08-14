@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MessagingManager : ScriptableObject {
+public class MessagingManager : ScriptableObject, IAcceptsMessages<BaseMessage> {
 
     private static MessagingManager _instance = null;
 
@@ -22,6 +22,11 @@ public class MessagingManager : ScriptableObject {
         {
             _instance = value;
         }
+    }
+
+    public void AcceptMessage(BaseMessage messageIn)
+    {
+        Debug.Log("Received " + messageIn.GetType().Name + " message " + messageIn.UUID.ToString() + "; preparing to route");
     }
 
     // Use this for initialization

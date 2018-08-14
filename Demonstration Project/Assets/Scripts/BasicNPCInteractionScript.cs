@@ -46,6 +46,7 @@ public class BasicNPCInteractionScript : BaseControllerObject
                 textBoxObj.text = TextToDisplay;
                 countdown = COUNTDOWN_START;
                 clearBox = true;
+                messenger.AcceptMessage(new WindowMessage(gameObject, TextToDisplay, COUNTDOWN_START));
             }
         }
     }

@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 114753133149748602}
   - component: {fileID: 114679232188661904}
   m_Layer: 0
-  m_Name: BasicDialogBox
+  m_Name: BaseDialogBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
