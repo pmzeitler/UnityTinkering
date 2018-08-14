@@ -27,7 +27,7 @@ public class BaseAutoDestructComponent : BaseControllerObject
     {
         base.FixedUpdate();
 
-        if (!gameState.IsPaused)
+        if (!IsPaused)
         {
             if (countdown > 0)
             {
@@ -38,5 +38,15 @@ public class BaseAutoDestructComponent : BaseControllerObject
                 Destroy(gameObject);
             }
         }
+    }
+
+    protected override void EnterPause()
+    {
+        //throw new System.NotImplementedException();
+    }
+
+    protected override void ExitPause()
+    {
+        //throw new System.NotImplementedException();
     }
 }

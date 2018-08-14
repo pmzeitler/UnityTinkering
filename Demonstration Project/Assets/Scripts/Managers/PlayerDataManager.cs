@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerDataManager : ScriptableObject
 {
 
-    public static PlayerDataManager _instance;
+    private static PlayerDataManager _instance;
 
     public static PlayerDataManager Instance
     {

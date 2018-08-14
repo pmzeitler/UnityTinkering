@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class PlayerController : BaseControllerObject
+public class PlayerController : BaseControllerObject, IAcceptsMessages<BasePlayerMessage>
 {
     public Transform interactionCircle;
     //private float velocity = 10;
@@ -48,15 +48,13 @@ public class PlayerController : BaseControllerObject
     // Update is called once per frame
     protected override void FixedUpdate()
     {
-        base.FixedUpdate();
-        if (playerData == null)
-        {
-            playerData = PlayerDataManager._instance;
-            Debug.Log("PlayerData instance is " + playerData);
-        }
+        //TODO: remove this CheckPaused 
         CheckPaused();
 
-        if (!gameState.IsPaused)
+        base.FixedUpdate();
+        //CheckPauseState();
+
+        if (!IsPaused)
         {
             // Cache the inputs.
             float h = 0.0f;
@@ -309,5 +307,20 @@ public class PlayerController : BaseControllerObject
                 }
             }
         }
+    }
+
+    public void AcceptMessage(BasePlayerMessage messageIn)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    protected override void EnterPause()
+    {
+        gameObject.GetComponent<Animator>().enabled = false;
+    }
+
+    protected override void ExitPause()
+    {
+        gameObject.GetComponent<Animator>().enabled = true;
     }
 }

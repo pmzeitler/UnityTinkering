@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseControllerObject : MonoBehaviour {
+public abstract class BaseControllerObject : MonoBehaviour {
 
     protected PlayerDataManager playerData;
     protected GameStateManager gameState;
@@ -16,12 +16,44 @@ public class BaseControllerObject : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	protected virtual void Update () {
-		
+	protected virtual void Update ()
+    {
+        CheckPauseState();
 	}
 
     protected virtual void FixedUpdate()
     {
-
+        CheckPauseState();
     }
+
+    private bool _wasPaused = false;
+    protected bool IsPaused
+    {
+        get
+        {
+            return gameState.IsPaused;
+        }
+    }
+
+    protected virtual bool CheckPauseState()
+    {
+        bool _isPaused = IsPaused;
+        if (_wasPaused != _isPaused)
+        {
+            if (_isPaused)
+            {
+                //entering pause state
+                EnterPause();
+            } else
+            {
+                //leaving pause state
+                ExitPause();
+            }
+        }
+        _wasPaused = _isPaused;
+        return _isPaused;
+    }
+
+    protected abstract void EnterPause();
+    protected abstract void ExitPause();
 }

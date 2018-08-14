@@ -21,7 +21,7 @@ public class BasicNPCMovement : BaseControllerObject
     protected override void Update()
     {
         base.Update();
-        if (!gameState.IsPaused)
+        if (!IsPaused)
         {
             Vector3 newPosition = gameObject.transform.position;
             countdown--;
@@ -65,5 +65,15 @@ public class BasicNPCMovement : BaseControllerObject
             }
             gameObject.transform.position = newPosition;
         }
+    }
+
+    protected override void EnterPause()
+    {
+        //throw new System.NotImplementedException();
+    }
+
+    protected override void ExitPause()
+    {
+        //throw new System.NotImplementedException();
     }
 }

@@ -7,9 +7,7 @@ public class EyeColliderController : MonoBehaviour {
 
     public Text textBoxObj;
 
-    private int countdown = 0;
     private const int COUNTDOWN_START = 90;
-    private bool clearBox = false;
 
 	// Use this for initialization
 	void Start () {
@@ -17,24 +15,13 @@ public class EyeColliderController : MonoBehaviour {
 	}
 	
 	void FixedUpdate () {
-        if (countdown > 0)
-        {
-            countdown--;
-        }
-        if ((countdown <= 0) && clearBox)
-        {
-            textBoxObj.text = "";
-            clearBox = false;
-        }
 	}
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "InteractionCircle")
         {
-            textBoxObj.text = "You have hit the eye!!";
-            countdown = COUNTDOWN_START;
-            clearBox = true;
+            MessagingManager.Instance.AcceptMessage(new WindowMessage(gameObject, "You have hit the eye!!", COUNTDOWN_START));
         } 
     }
 }

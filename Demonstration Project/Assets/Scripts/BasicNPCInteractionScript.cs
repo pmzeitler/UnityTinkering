@@ -15,6 +15,17 @@ public class BasicNPCInteractionScript : BaseControllerObject
         base.Awake();
     }
 
+    protected override void EnterPause()
+    {
+        //this is an awful hack but oh well
+        gameObject.transform.parent.gameObject.GetComponentInChildren<Animator>().enabled = false;
+    }
+
+    protected override void ExitPause()
+    {
+        gameObject.transform.parent.gameObject.GetComponentInChildren<Animator>().enabled = true;
+    }
+
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
@@ -22,7 +33,7 @@ public class BasicNPCInteractionScript : BaseControllerObject
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!gameState.IsPaused)
+        if (!IsPaused)
         {
             if (collision.gameObject.tag == "InteractionCircle")
             {
