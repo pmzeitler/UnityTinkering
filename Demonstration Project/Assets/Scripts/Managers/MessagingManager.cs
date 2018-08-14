@@ -31,13 +31,12 @@ public class MessagingManager : ScriptableObject {
         {
             _instance = this;
             Debug.Log("MessagingManager created");
-            //DontDestroyOnLoad(gameObject);
         }
         else
         {
             if (_instance != this)
             {
-            //    Destroy(gameObject);
+                //do nothing;
             }
         }
     }
