@@ -95,8 +95,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1401210061818516}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -47.4, y: 57.6, z: -8.0546875}
-  m_LocalScale: {x: 0.66, y: 0.66, z: 1}
+  m_LocalPosition: {x: -798.3, y: 423.8, z: -8.0546875}
+  m_LocalScale: {x: 8, y: 8, z: 1}
   m_Children:
   - {fileID: 4213349434365030}
   - {fileID: 4022516427780324}
@@ -117,7 +117,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.52
+  m_Radius: 0.41
 --- !u!58 &58898148476791758
 CircleCollider2D:
   m_ObjectHideFlags: 1
@@ -132,7 +132,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1.3
+  m_Radius: 1
 --- !u!95 &95305807287594302
 Animator:
   serializedVersion: 3
@@ -162,7 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 308b2b1115efcc0479106c81f453365c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpeedPerFrame: 0.05
+  SpeedPerFrame: 0.25
 --- !u!114 &114630977134960202
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -175,6 +175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textBoxObj: {fileID: 0}
+  TextToDisplay: You are speaking to the green NPC.
 --- !u!212 &212118824925452360
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -208,10 +209,10 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 596990303
-  m_SortingLayer: 2
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300058, guid: 0cde835f70de0b348a430dedb2b8884c, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.47957468, g: 1, b: 0.4575472, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

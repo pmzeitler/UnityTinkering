@@ -673,41 +673,28 @@ Prefab:
     - target: {fileID: 212118824925452360, guid: 2ee2b09d051beda45b95a1c7a00564bb,
         type: 2}
       propertyPath: m_Color.r
-      value: 0
+      value: 0.31305623
       objectReference: {fileID: 0}
     - target: {fileID: 212118824925452360, guid: 2ee2b09d051beda45b95a1c7a00564bb,
         type: 2}
       propertyPath: m_Color.g
-      value: 0.9905014
+      value: 0.65021473
       objectReference: {fileID: 0}
     - target: {fileID: 212118824925452360, guid: 2ee2b09d051beda45b95a1c7a00564bb,
         type: 2}
       propertyPath: m_Color.b
-      value: 1
+      value: 0.990566
+      objectReference: {fileID: 0}
+    - target: {fileID: 114630977134960202, guid: 2ee2b09d051beda45b95a1c7a00564bb,
+        type: 2}
+      propertyPath: TextToDisplay
+      value: You are speaking to the blue NPC.
       objectReference: {fileID: 0}
     - target: {fileID: 114630977134960202, guid: 2ee2b09d051beda45b95a1c7a00564bb,
         type: 2}
       propertyPath: textBoxObj
       value: 
       objectReference: {fileID: 1811960842}
-    - target: {fileID: 114630977134960202, guid: 2ee2b09d051beda45b95a1c7a00564bb,
-        type: 2}
-      propertyPath: TextToDisplay
-      value: You are speaking to the blue NPC.
-      objectReference: {fileID: 0}
-    - target: {fileID: 4595199311085042, guid: 2ee2b09d051beda45b95a1c7a00564bb, type: 2}
-      propertyPath: m_LocalScale.x
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4595199311085042, guid: 2ee2b09d051beda45b95a1c7a00564bb, type: 2}
-      propertyPath: m_LocalScale.y
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 114616964954679878, guid: 2ee2b09d051beda45b95a1c7a00564bb,
-        type: 2}
-      propertyPath: SpeedPerFrame
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ee2b09d051beda45b95a1c7a00564bb, type: 2}
   m_IsPrefabAsset: 0
@@ -749,34 +736,6 @@ Prefab:
     - target: {fileID: 4595199311085042, guid: 2ee2b09d051beda45b95a1c7a00564bb, type: 2}
       propertyPath: m_RootOrder
       value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 4595199311085042, guid: 2ee2b09d051beda45b95a1c7a00564bb, type: 2}
-      propertyPath: m_LocalScale.x
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4595199311085042, guid: 2ee2b09d051beda45b95a1c7a00564bb, type: 2}
-      propertyPath: m_LocalScale.y
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 114616964954679878, guid: 2ee2b09d051beda45b95a1c7a00564bb,
-        type: 2}
-      propertyPath: SpeedPerFrame
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 212118824925452360, guid: 2ee2b09d051beda45b95a1c7a00564bb,
-        type: 2}
-      propertyPath: m_Color.r
-      value: 0.47957468
-      objectReference: {fileID: 0}
-    - target: {fileID: 212118824925452360, guid: 2ee2b09d051beda45b95a1c7a00564bb,
-        type: 2}
-      propertyPath: m_Color.b
-      value: 0.4575472
-      objectReference: {fileID: 0}
-    - target: {fileID: 114630977134960202, guid: 2ee2b09d051beda45b95a1c7a00564bb,
-        type: 2}
-      propertyPath: TextToDisplay
-      value: You are speaking to the green NPC.
       objectReference: {fileID: 0}
     - target: {fileID: 114630977134960202, guid: 2ee2b09d051beda45b95a1c7a00564bb,
         type: 2}
