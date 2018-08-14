@@ -46,8 +46,23 @@ TagManager:
   - name: Backgrounds
     uniqueID: 561233415
     locked: 0
+  - name: TileLayer Floor
+    uniqueID: 3583616725
+    locked: 0
+  - name: TileLayer Floor BG Flavor
+    uniqueID: 1948054257
+    locked: 0
+  - name: TileLayer Walls
+    uniqueID: 1381624019
+    locked: 0
   - name: Player Sprite
     uniqueID: 596990303
+    locked: 0
+  - name: TileLayer Floor FG Flavor
+    uniqueID: 2693678285
+    locked: 0
+  - name: Tilelayer Foreground
+    uniqueID: 2458116601
     locked: 0
   - name: UI
     uniqueID: 1835033069
