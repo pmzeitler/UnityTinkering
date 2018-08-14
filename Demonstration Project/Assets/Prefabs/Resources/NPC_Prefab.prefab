@@ -174,7 +174,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 786e77c77b2bbe5439d1b431bf87320f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textBoxObj: {fileID: 0}
   TextToDisplay: You are speaking to the green NPC.
 --- !u!212 &212118824925452360
 SpriteRenderer:

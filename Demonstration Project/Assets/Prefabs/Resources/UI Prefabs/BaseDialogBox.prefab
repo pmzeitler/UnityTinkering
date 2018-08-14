@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 222320486468991400}
   - component: {fileID: 114753133149748602}
   - component: {fileID: 114679232188661904}
+  - component: {fileID: 114675467500207116}
   m_Layer: 0
   m_Name: BaseDialogBox
   m_TagString: Untagged
@@ -98,6 +99,17 @@ MonoBehaviour:
     3 lines, 39 columns of pure text.
 
     123456789012345678901234567890123456789'
+--- !u!114 &114675467500207116
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1377628420917014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4899a068ff92f0c43b395e3cafa9c467, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114679232188661904
 MonoBehaviour:
   m_ObjectHideFlags: 1

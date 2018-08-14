@@ -26,7 +26,11 @@ public class MessagingManager : ScriptableObject, IAcceptsMessages<BaseMessage> 
 
     public void AcceptMessage(BaseMessage messageIn)
     {
-        Debug.Log("Received " + messageIn.GetType().Name + " message " + messageIn.UUID.ToString() + "; preparing to route");
+        //Debug.Log("Received " + messageIn.GetType().Name + " message " + messageIn.UUID.ToString() + "; preparing to route");
+        if (messageIn is WindowMessage)
+        {
+            UIManager.Instance.AcceptMessage((WindowMessage)messageIn);
+        }
     }
 
     // Use this for initialization
