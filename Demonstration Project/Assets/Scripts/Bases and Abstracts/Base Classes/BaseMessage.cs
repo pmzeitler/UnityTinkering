@@ -8,7 +8,7 @@ public abstract class BaseMessage {
     private GameObject originObject;
     private Guid uuid;
 
-    public GameObject OriginObject
+    public virtual GameObject OriginObject
     {
         get
         {
