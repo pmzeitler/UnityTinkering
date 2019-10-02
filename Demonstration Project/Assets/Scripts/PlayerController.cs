@@ -7,7 +7,7 @@ public class PlayerController : BaseControllerObject, IAcceptsMessages<BasePlaye
     public Transform interactionCircle;
     //private float velocity = 10;
 
-    private bool useSticks = false;
+    private bool useSticks = true;
 
     //This is the maximum velocity to permit the player to move in.
     public float velocityMax = 500.0f;
@@ -52,7 +52,6 @@ public class PlayerController : BaseControllerObject, IAcceptsMessages<BasePlaye
         CheckPaused();
 
         base.FixedUpdate();
-        //CheckPauseState();
 
         if (!IsPaused)
         {
@@ -263,7 +262,7 @@ public class PlayerController : BaseControllerObject, IAcceptsMessages<BasePlaye
         if (!moving)
         {
             acceleration = 0.0f;
-            if (direction > 0)
+            if (currentVelocity > 0)
             {
                 currentVelocity -= velocityDecay;
                 if(currentVelocity < 0.0f)
@@ -282,28 +281,29 @@ public class PlayerController : BaseControllerObject, IAcceptsMessages<BasePlaye
         }
         else
         {
+            float intendedVelocityMax = velocityMax * Mathf.Abs(direction);
             if (direction > 0)
             {
-                if ((currentVelocity + acceleration + velocityAccel) < velocityMax)
+                if ((currentVelocity + acceleration + velocityAccel) < intendedVelocityMax)
                 {
                     acceleration += velocityAccel;
                     currentVelocity += acceleration;
                 }
                 else
                 {
-                    currentVelocity = velocityMax;
+                    currentVelocity = intendedVelocityMax;
                 }
             }
             else
             {
-                if ((currentVelocity - (acceleration + velocityAccel)) > velocityMax)
+                if (Mathf.Abs(currentVelocity - (acceleration + velocityAccel)) < intendedVelocityMax)
                 {
                     acceleration += velocityAccel;
                     currentVelocity -= acceleration;
                 }
                 else
                 {
-                    currentVelocity = (0.0f - velocityMax);
+                    currentVelocity = (0.0f - intendedVelocityMax);
                 }
             }
         }
