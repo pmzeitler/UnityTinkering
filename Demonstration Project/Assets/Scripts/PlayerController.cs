@@ -36,7 +36,7 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
     private List<BasePlayerMessage> messageQueue;
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         this.facingDirection = Direction.NORTH;
         this.messageQueue = new List<BasePlayerMessage>();
@@ -62,26 +62,6 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
         {
             InputMappingManager.Instance.CheckUserInput();
 
-            // Cache the inputs.
-            float h = 0.0f;
-            float v = 0.0f;
-
-            DetermineMovement(ref h, ref v);
-
-            bool movingHorizontal = ((h >= AXIS_DEAD_ZONE) || (h <= (0.0f - AXIS_DEAD_ZONE)));
-            bool movingVertical = ((v >= AXIS_DEAD_ZONE) || (v <= (0.0f - AXIS_DEAD_ZONE)));
-
-            AdjustFacing(h, v, movingHorizontal, movingVertical);
-
-            Vector2 newVelocity = new Vector2(this.GetComponent<Rigidbody2D>().velocity.x, this.GetComponent<Rigidbody2D>().velocity.y);
-
-            handleAccelDecel(movingHorizontal, h, ref newVelocity.x, ref currentAcceleration.x);
-            handleAccelDecel(movingVertical, v, ref newVelocity.y, ref currentAcceleration.y);
-
-            this.GetComponent<Rigidbody2D>().velocity = newVelocity;
-
-            //SpawnInteractorCheck();
-
             processMessages(messageQueue);
         }
 
@@ -103,79 +83,41 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
 
     private void SpawnInteractorCheck()
     {
-        //if (Input.GetKeyDown(KeyCode.Space) && canSpawnInteractor)
-        //{
-            Vector3 instantiateLocation = this.GetComponent<Transform>().position;
-            switch (playerData.FacingDirection)
-            {
-                case Direction.NORTH:
-                    instantiateLocation.y += this.GetComponent<Collider2D>().bounds.size.y;
-                    break;
-                case Direction.SOUTH:
-                    instantiateLocation.y -= this.GetComponent<Collider2D>().bounds.size.y;
-                    break;
-                case Direction.EAST:
-                    instantiateLocation.x += this.GetComponent<Collider2D>().bounds.size.x;
-                    break;
-                case Direction.WEST:
-                    instantiateLocation.x -= this.GetComponent<Collider2D>().bounds.size.x;
-                    break;
-                case Direction.NORTHEAST:
-                    instantiateLocation.y += (this.GetComponent<Collider2D>().bounds.size.y * DIAGONAL_RATIO);
-                    instantiateLocation.x += (this.GetComponent<Collider2D>().bounds.size.x * DIAGONAL_RATIO);
-                    break;
-                case Direction.NORTHWEST:
-                    instantiateLocation.y += (this.GetComponent<Collider2D>().bounds.size.y * DIAGONAL_RATIO);
-                    instantiateLocation.x -= (this.GetComponent<Collider2D>().bounds.size.x * DIAGONAL_RATIO);
-                    break;
-                case Direction.SOUTHEAST:
-                    instantiateLocation.y -= (this.GetComponent<Collider2D>().bounds.size.y * DIAGONAL_RATIO);
-                    instantiateLocation.x += (this.GetComponent<Collider2D>().bounds.size.x * DIAGONAL_RATIO);
-                    break;
-                case Direction.SOUTHWEST:
-                    instantiateLocation.y -= (this.GetComponent<Collider2D>().bounds.size.y * DIAGONAL_RATIO);
-                    instantiateLocation.x -= (this.GetComponent<Collider2D>().bounds.size.x * DIAGONAL_RATIO);
-                    break;
-
-            }
-            Instantiate(interactionCircle, instantiateLocation, Quaternion.identity);
-            //canSpawnInteractor = false;
-        //}
-        /*
-        if (Input.GetKeyUp(KeyCode.Space))
+        Vector3 instantiateLocation = this.GetComponent<Transform>().position;
+        switch (playerData.FacingDirection)
         {
-            canSpawnInteractor = true;
-        }
-        */
-    }
+            case Direction.NORTH:
+                instantiateLocation.y += this.GetComponent<Collider2D>().bounds.size.y;
+                break;
+            case Direction.SOUTH:
+                instantiateLocation.y -= this.GetComponent<Collider2D>().bounds.size.y;
+                break;
+            case Direction.EAST:
+                instantiateLocation.x += this.GetComponent<Collider2D>().bounds.size.x;
+                break;
+            case Direction.WEST:
+                instantiateLocation.x -= this.GetComponent<Collider2D>().bounds.size.x;
+                break;
+            case Direction.NORTHEAST:
+                instantiateLocation.y += (this.GetComponent<Collider2D>().bounds.size.y * DIAGONAL_RATIO);
+                instantiateLocation.x += (this.GetComponent<Collider2D>().bounds.size.x * DIAGONAL_RATIO);
+                break;
+            case Direction.NORTHWEST:
+                instantiateLocation.y += (this.GetComponent<Collider2D>().bounds.size.y * DIAGONAL_RATIO);
+                instantiateLocation.x -= (this.GetComponent<Collider2D>().bounds.size.x * DIAGONAL_RATIO);
+                break;
+            case Direction.SOUTHEAST:
+                instantiateLocation.y -= (this.GetComponent<Collider2D>().bounds.size.y * DIAGONAL_RATIO);
+                instantiateLocation.x += (this.GetComponent<Collider2D>().bounds.size.x * DIAGONAL_RATIO);
+                break;
+            case Direction.SOUTHWEST:
+                instantiateLocation.y -= (this.GetComponent<Collider2D>().bounds.size.y * DIAGONAL_RATIO);
+                instantiateLocation.x -= (this.GetComponent<Collider2D>().bounds.size.x * DIAGONAL_RATIO);
+                break;
 
-    private void DetermineMovement(ref float h, ref float v)
-    {
-        if (useSticks)
-        {
-            h = Input.GetAxis("Horizontal");
-            v = Input.GetAxis("Vertical");
         }
-        else
-        {
-            if (Input.GetKey(KeyCode.LeftArrow))
-            {
-                h = -1.0f;
-            }
-            else if (Input.GetKey(KeyCode.RightArrow))
-            {
-                h = 1.0f;
-            }
+        Instantiate(interactionCircle, instantiateLocation, Quaternion.identity);
 
-            if (Input.GetKey(KeyCode.DownArrow))
-            {
-                v = -1.0f;
-            }
-            else if (Input.GetKey(KeyCode.UpArrow))
-            {
-                v = 1.0f;
-            }
-        }
     }
 
     private void AdjustFacing(float h, float v, bool movingHorizontal, bool movingVertical)
@@ -275,7 +217,7 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
             if (currentVelocity > 0)
             {
                 currentVelocity -= velocityDecay;
-                if(currentVelocity < 0.0f)
+                if (currentVelocity < 0.0f)
                 {
                     currentVelocity = 0.0f;
                 }
@@ -319,6 +261,18 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
         }
     }
 
+    private void HandleMovement(Vector2 movement, bool movingHorizontal, bool movingVertical)
+    {
+        AdjustFacing(movement.x, movement.y, movingHorizontal, movingVertical);
+
+        Vector2 newVelocity = new Vector2(this.GetComponent<Rigidbody2D>().velocity.x, this.GetComponent<Rigidbody2D>().velocity.y);
+
+        handleAccelDecel(movingHorizontal, movement.x, ref newVelocity.x, ref currentAcceleration.x);
+        handleAccelDecel(movingVertical, movement.y, ref newVelocity.y, ref currentAcceleration.y);
+
+        this.GetComponent<Rigidbody2D>().velocity = newVelocity;
+    }
+
     public void AcceptMessage(BasePlayerMessage messageIn)
     {
         this.queueMessage(messageIn);
@@ -341,7 +295,11 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
 
     public void processMessages(ICollection<BasePlayerMessage> messages)
     {
-
+        if (messages.Count < 1)
+        {
+            return;
+        }
+        int messagesProcessed = 0;
         List<BasePlayerMessage> clearThese = new List<BasePlayerMessage>();
         foreach (BasePlayerMessage messageIn in messages)
         {
@@ -349,19 +307,38 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
             if (messageIn is MsgPlayerSpawnInteraction)
             {
                 SpawnInteractorCheck();
-            } else
+                messagesProcessed++;
+            } else if (messageIn is MsgPlayerMovementRequest)
+            {
+                HandleMovement(((MsgPlayerMovementRequest)messageIn).StickPosition, ((MsgPlayerMovementRequest)messageIn).MovingHorizontal, ((MsgPlayerMovementRequest)messageIn).MovingVertical);
+
+                messagesProcessed++;
+            }
+            else
             {
                 messageCleared = false;
             }
+
             if (messageCleared)
             {
                 clearThese.Add(messageIn);
             }
         }
+        //Debug.Log("PlayerController processed " + messagesProcessed + " of " + messages.Count + " msgs this frame; " + clearThese.Count + " to clear");
+
         foreach (BasePlayerMessage messageOut in clearThese)
         {
             messages.Remove(messageOut);
         }
-
+        /*
+        if (messages.Count > 0)
+        {
+            Debug.Log("Messages cleared; PlayerController queue still has " + messages.Count + " messages");
+            foreach (BasePlayerMessage messageIn in messages)
+            {
+                Debug.Log("Message held: " + messageIn.GetType().Name);
+            }
+        }
+        */
     }
 }

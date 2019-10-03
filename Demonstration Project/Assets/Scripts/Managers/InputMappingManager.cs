@@ -8,6 +8,9 @@ public class InputMappingManager : ScriptableObject {
     private static InputMappingManager _instance;
 
     private Dictionary<GameState, Dictionary<KeyCode, BasePlayerAction>> MappingStructure;
+    private Dictionary<GameState, Dictionary<Direction, KeyCode>> DirectionalKeysMappings;
+    private bool useSticks = false;
+    private const float AXIS_DEAD_ZONE = 0.15f;
 
     public static InputMappingManager Instance
     {
@@ -35,9 +38,11 @@ public class InputMappingManager : ScriptableObject {
             Debug.Log("InputMappingManager created");
 
             this.MappingStructure = new Dictionary<GameState, Dictionary<KeyCode, BasePlayerAction>>();
+            this.DirectionalKeysMappings = new Dictionary<GameState, Dictionary<Direction, KeyCode>>();
             foreach (GameState state in Enum.GetValues(typeof(GameState)) )
             {
                 this.MappingStructure[state] = new Dictionary<KeyCode, BasePlayerAction>();
+                this.DirectionalKeysMappings[state] = new Dictionary<Direction, KeyCode>();
             }
 
             LoadDefaultKeyMapping();
@@ -55,14 +60,83 @@ public class InputMappingManager : ScriptableObject {
     {
         MappingStructure[GameState.IN_GAMEPLAY][KeyCode.Space] = new SpawnInteractorAction();
         MappingStructure[GameState.IN_GAMEPLAY][KeyCode.JoystickButton0] = MappingStructure[GameState.IN_GAMEPLAY][KeyCode.Space];
+
+        DirectionalKeysMappings[GameState.IN_GAMEPLAY][Direction.NORTH] = KeyCode.UpArrow;
+        DirectionalKeysMappings[GameState.IN_GAMEPLAY][Direction.SOUTH] = KeyCode.DownArrow;
+        DirectionalKeysMappings[GameState.IN_GAMEPLAY][Direction.WEST] = KeyCode.LeftArrow;
+        DirectionalKeysMappings[GameState.IN_GAMEPLAY][Direction.EAST] = KeyCode.RightArrow;
+
+
+    }
+
+    private void DetermineMovement(ref float h, ref float v, ref bool mh, ref bool mv)
+    {
+        if (useSticks)
+        {
+            h = Input.GetAxis("Horizontal");
+            v = Input.GetAxis("Vertical");
+        }
+        else
+        {
+            if (Input.GetKey(DirectionalKeysMappings[GameState.IN_GAMEPLAY][Direction.WEST]))
+            {
+                h = -1.0f;
+            }
+            else if (Input.GetKey(DirectionalKeysMappings[GameState.IN_GAMEPLAY][Direction.EAST]))
+            {
+                h = 1.0f;
+            }
+
+            if (Input.GetKey(DirectionalKeysMappings[GameState.IN_GAMEPLAY][Direction.SOUTH]))
+            {
+                v = -1.0f;
+            }
+            else if (Input.GetKey(DirectionalKeysMappings[GameState.IN_GAMEPLAY][Direction.NORTH]))
+            {
+                v = 1.0f;
+            }
+        }
+
+        if (Mathf.Abs(h) <= AXIS_DEAD_ZONE)
+        {
+            h = 0.0f;
+            mh = false;
+        } else
+        {
+            mh = true;
+        }
+        if (Mathf.Abs(v) <= AXIS_DEAD_ZONE)
+        {
+            v = 0.0f;
+            mv = false;
+        } else
+        {
+            mv = true;
+        }
     }
 
     public void CheckUserInput()
     {
+        float h = 0.0f;
+        float v = 0.0f;
+        bool mh = false;
+        bool mv = false;
+
+        DetermineMovement(ref h, ref v, ref mh, ref mv);
+
+        MessagingManager.Instance.AcceptMessage(new MsgPlayerMovementRequest(new Vector2(h, v), mh, mv));
+
         Dictionary<KeyCode, BasePlayerAction> currentModeMappings = MappingStructure[GameStateManager.Instance.GameState];
 
         foreach(KeyValuePair<KeyCode, BasePlayerAction> checkMe in currentModeMappings)
         {
+            /*
+             * if (DirectionalKeysMappings[GameStateManager.Instance.GameState].ContainsValue(checkMe.Key) )
+            {
+                continue;
+            }
+            */
+
             bool actDown = Input.GetKeyDown(checkMe.Key);
             bool actHeld = Input.GetKey(checkMe.Key);
             bool actUp = Input.GetKeyUp(checkMe.Key);
@@ -71,16 +145,16 @@ public class InputMappingManager : ScriptableObject {
             {
                 if(actDown)
                 {
-                    //Debug.Log("STARTING ACTION " + checkMe.Value.ToString());
+                    Debug.Log("STARTING ACTION " + checkMe.Value.ToString());
                     checkMe.Value.StartAction();
                 } else
                 {
-                    //Debug.Log("HOLDING ACTION " + checkMe.Value.ToString());
+                    Debug.Log("HOLDING ACTION " + checkMe.Value.ToString());
                     checkMe.Value.HeldAction();
                 }
             } else if (actUp)
             {
-                //Debug.Log("ENDING ACTION " + checkMe.Value.ToString());
+                Debug.Log("ENDING ACTION " + checkMe.Value.ToString());
                 checkMe.Value.EndAction();
             }
         }
