@@ -60,6 +60,8 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
 
         if (!IsPaused)
         {
+            InputMappingManager.Instance.CheckUserInput();
+
             // Cache the inputs.
             float h = 0.0f;
             float v = 0.0f;

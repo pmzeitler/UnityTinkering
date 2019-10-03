@@ -7,6 +7,8 @@ public class GameStateManager : ScriptableObject, IAcceptsMessages<BaseMessage>
 
     private static GameStateManager _instance = null;
 
+    public GameState GameState { get; private set; }
+
     public static GameStateManager Instance
     {
         get
@@ -36,6 +38,7 @@ public class GameStateManager : ScriptableObject, IAcceptsMessages<BaseMessage>
             _instance = this;
             Debug.Log("GameStateManager created");
             this.IsPaused = false;
+            this.GameState = GameState.IN_GAMEPLAY;
         }
         else
         {
