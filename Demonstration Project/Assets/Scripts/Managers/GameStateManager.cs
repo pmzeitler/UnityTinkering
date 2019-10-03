@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameStateManager : ScriptableObject
+public class GameStateManager : ScriptableObject, IAcceptsMessages<BaseMessage>
 {
 
     private static GameStateManager _instance = null;
@@ -27,6 +27,8 @@ public class GameStateManager : ScriptableObject
 
     public bool IsPaused { get; set; }
 
+
+
     // Use this for initialization
     void Awake() {
         if (_instance == null)
@@ -43,9 +45,14 @@ public class GameStateManager : ScriptableObject
             }
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    public void AcceptMessage(BaseMessage messageIn)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    // Update is called once per frame
+    void Update () {
 		
 	}
 }

@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
-public class PlayerController : BaseControllerObject, IAcceptsMessages<BasePlayerMessage>
+public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessages<BasePlayerMessage>
 {
     public Transform interactionCircle;
     //private float velocity = 10;
@@ -32,10 +33,13 @@ public class PlayerController : BaseControllerObject, IAcceptsMessages<BasePlaye
 
     public Direction facingDirection { get; private set; }
 
+    private List<BasePlayerMessage> messageQueue;
+
     // Use this for initialization
     void Start ()
     {
         this.facingDirection = Direction.NORTH;
+        this.messageQueue = new List<BasePlayerMessage>();
     }
 
     protected override void Awake()
@@ -43,6 +47,7 @@ public class PlayerController : BaseControllerObject, IAcceptsMessages<BasePlaye
         base.Awake();
         animator = GetComponent<Animator>();
         //Debug.Log("PlayerData instance is " + playerData);
+        playerData.PlayerController = this;
     }
 
     // Update is called once per frame
@@ -311,7 +316,7 @@ public class PlayerController : BaseControllerObject, IAcceptsMessages<BasePlaye
 
     public void AcceptMessage(BasePlayerMessage messageIn)
     {
-        throw new System.NotImplementedException();
+        this.queueMessage(messageIn);
     }
 
     protected override void EnterPause()
@@ -322,5 +327,15 @@ public class PlayerController : BaseControllerObject, IAcceptsMessages<BasePlaye
     protected override void ExitPause()
     {
         gameObject.GetComponent<Animator>().enabled = true;
+    }
+
+    public void queueMessage(BasePlayerMessage messageIn)
+    {
+        messageQueue.Add(messageIn);
+    }
+
+    public void processMessages(ICollection<BasePlayerMessage> messages)
+    {
+        throw new System.NotImplementedException();
     }
 }

@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerDataManager : ScriptableObject
+public class PlayerDataManager : ScriptableObject, IAcceptsMessages<BasePlayerMessage>
 {
 
     private static PlayerDataManager _instance;
+
+    private static PlayerController _playerController;
 
     public static PlayerDataManager Instance
     {
@@ -28,8 +30,19 @@ public class PlayerDataManager : ScriptableObject
     public Direction MovingDirection { get; set; }
     public Direction FacingDirection { get; set; }
 
-	// Use this for initialization
-	void Awake () {
+    public PlayerController PlayerController { set
+        {
+            _playerController = value;
+        }
+    }
+
+    public void AcceptMessage(BasePlayerMessage messageIn)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    // Use this for initialization
+    void Awake () {
 		if (_instance == null)
         {
             _instance = this;
