@@ -54,6 +54,7 @@ public class InputMappingManager : ScriptableObject {
     private void LoadDefaultKeyMapping()
     {
         MappingStructure[GameState.IN_GAMEPLAY][KeyCode.Space] = new SpawnInteractorAction();
+        MappingStructure[GameState.IN_GAMEPLAY][KeyCode.JoystickButton0] = MappingStructure[GameState.IN_GAMEPLAY][KeyCode.Space];
     }
 
     public void CheckUserInput()

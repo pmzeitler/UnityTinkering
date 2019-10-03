@@ -28,7 +28,7 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
 
     private Animator animator;
 
-    private bool canSpawnInteractor = true;
+    //private bool canSpawnInteractor = true;
     private bool pauseKeyDown = false;
 
     public Direction facingDirection { get; private set; }
