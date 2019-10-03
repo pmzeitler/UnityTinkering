@@ -80,7 +80,9 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
 
             this.GetComponent<Rigidbody2D>().velocity = newVelocity;
 
-            SpawnInteractorCheck();
+            //SpawnInteractorCheck();
+
+            processMessages(messageQueue);
         }
 
     }
@@ -101,8 +103,8 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
 
     private void SpawnInteractorCheck()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && canSpawnInteractor)
-        {
+        //if (Input.GetKeyDown(KeyCode.Space) && canSpawnInteractor)
+        //{
             Vector3 instantiateLocation = this.GetComponent<Transform>().position;
             switch (playerData.FacingDirection)
             {
@@ -137,13 +139,14 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
 
             }
             Instantiate(interactionCircle, instantiateLocation, Quaternion.identity);
-            canSpawnInteractor = false;
-        }
-
+            //canSpawnInteractor = false;
+        //}
+        /*
         if (Input.GetKeyUp(KeyCode.Space))
         {
             canSpawnInteractor = true;
         }
+        */
     }
 
     private void DetermineMovement(ref float h, ref float v)
@@ -338,6 +341,27 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
 
     public void processMessages(ICollection<BasePlayerMessage> messages)
     {
-        throw new System.NotImplementedException();
+
+        List<BasePlayerMessage> clearThese = new List<BasePlayerMessage>();
+        foreach (BasePlayerMessage messageIn in messages)
+        {
+            bool messageCleared = true;
+            if (messageIn is MsgPlayerSpawnInteraction)
+            {
+                SpawnInteractorCheck();
+            } else
+            {
+                messageCleared = false;
+            }
+            if (messageCleared)
+            {
+                clearThese.Add(messageIn);
+            }
+        }
+        foreach (BasePlayerMessage messageOut in clearThese)
+        {
+            messages.Remove(messageOut);
+        }
+
     }
 }

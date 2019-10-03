@@ -7,7 +7,7 @@ public class PlayerDataManager : ScriptableObject, IAcceptsMessages<BasePlayerMe
 
     private static PlayerDataManager _instance;
 
-    private static PlayerController _playerController;
+    private PlayerController _playerController;
 
     public static PlayerDataManager Instance
     {
@@ -38,7 +38,10 @@ public class PlayerDataManager : ScriptableObject, IAcceptsMessages<BasePlayerMe
 
     public void AcceptMessage(BasePlayerMessage messageIn)
     {
-        throw new System.NotImplementedException();
+        if(messageIn is MsgPlayerSpawnInteraction)
+        {
+            this._playerController.AcceptMessage(messageIn);
+        }
     }
 
     // Use this for initialization
