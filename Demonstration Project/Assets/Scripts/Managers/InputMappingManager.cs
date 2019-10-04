@@ -7,7 +7,7 @@ public class InputMappingManager : ScriptableObject {
 
     private static InputMappingManager _instance;
 
-    private Dictionary<GameState, Dictionary<KeyCode, BasePlayerAction>> MappingStructure;
+    private Dictionary<GameState, Dictionary<KeyCode, BaseAction>> MappingStructure;
     private Dictionary<GameState, Dictionary<Direction, KeyCode>> DirectionalKeysMappings;
     private bool useSticks = false;
     private const float AXIS_DEAD_ZONE = 0.15f;
@@ -37,11 +37,11 @@ public class InputMappingManager : ScriptableObject {
             _instance = this;
             Debug.Log("InputMappingManager created");
 
-            this.MappingStructure = new Dictionary<GameState, Dictionary<KeyCode, BasePlayerAction>>();
+            this.MappingStructure = new Dictionary<GameState, Dictionary<KeyCode, BaseAction>>();
             this.DirectionalKeysMappings = new Dictionary<GameState, Dictionary<Direction, KeyCode>>();
             foreach (GameState state in Enum.GetValues(typeof(GameState)) )
             {
-                this.MappingStructure[state] = new Dictionary<KeyCode, BasePlayerAction>();
+                this.MappingStructure[state] = new Dictionary<KeyCode, BaseAction>();
                 this.DirectionalKeysMappings[state] = new Dictionary<Direction, KeyCode>();
             }
 
@@ -65,6 +65,12 @@ public class InputMappingManager : ScriptableObject {
         DirectionalKeysMappings[GameState.IN_GAMEPLAY][Direction.SOUTH] = KeyCode.DownArrow;
         DirectionalKeysMappings[GameState.IN_GAMEPLAY][Direction.WEST] = KeyCode.LeftArrow;
         DirectionalKeysMappings[GameState.IN_GAMEPLAY][Direction.EAST] = KeyCode.RightArrow;
+
+        foreach (GameState gameState in Enum.GetValues(typeof(GameState)) )
+        {
+            MappingStructure[gameState][KeyCode.P] = new TogglePauseAction();
+            MappingStructure[gameState][KeyCode.JoystickButton8] = MappingStructure[gameState][KeyCode.P];
+        }
 
 
     }
@@ -126,9 +132,9 @@ public class InputMappingManager : ScriptableObject {
 
         MessagingManager.Instance.AcceptMessage(new MsgPlayerMovementRequest(new Vector2(h, v), mh, mv));
 
-        Dictionary<KeyCode, BasePlayerAction> currentModeMappings = MappingStructure[GameStateManager.Instance.GameState];
+        Dictionary<KeyCode, BaseAction> currentModeMappings = MappingStructure[GameStateManager.Instance.GameState];
 
-        foreach(KeyValuePair<KeyCode, BasePlayerAction> checkMe in currentModeMappings)
+        foreach(KeyValuePair<KeyCode, BaseAction> checkMe in currentModeMappings)
         {
             /*
              * if (DirectionalKeysMappings[GameStateManager.Instance.GameState].ContainsValue(checkMe.Key) )

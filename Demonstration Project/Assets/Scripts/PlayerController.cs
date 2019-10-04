@@ -53,33 +53,17 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
     // Update is called once per frame
     protected override void FixedUpdate()
     {
-        //TODO: remove this CheckPaused 
-        CheckPaused();
-
         base.FixedUpdate();
+        
+        //TODO: move this to an InputController object
+        InputMappingManager.Instance.CheckUserInput();
 
-        if (!IsPaused)
-        {
-            InputMappingManager.Instance.CheckUserInput();
+        processMessages(messageQueue);
 
-            processMessages(messageQueue);
-        }
 
     }
 
-    private void CheckPaused()
-    {
-        if (Input.GetKeyDown(KeyCode.P) && !pauseKeyDown)
-        {
-            pauseKeyDown = true;
-            gameState.IsPaused = !gameState.IsPaused;
-        }
 
-        if (Input.GetKeyUp(KeyCode.P) && pauseKeyDown)
-        {
-            pauseKeyDown = false;
-        }
-    }
 
     private void SpawnInteractorCheck()
     {
@@ -275,7 +259,10 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
 
     public void AcceptMessage(BasePlayerControlMessage messageIn)
     {
-        this.queueMessage(messageIn);
+        if (!IsPaused)
+        {
+            this.queueMessage(messageIn);
+        }
     }
 
     protected override void EnterPause()

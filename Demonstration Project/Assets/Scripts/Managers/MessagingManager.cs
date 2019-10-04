@@ -30,7 +30,12 @@ public class MessagingManager : ScriptableObject, IAcceptsMessages<BaseMessage> 
         if (messageIn is WindowMessage)
         {
             UIManager.Instance.AcceptMessage((WindowMessage)messageIn);
-        } else if (messageIn is BasePlayerMessage)
+        }
+        else if  (messageIn is BaseGameStateMessage)
+        {
+            GameStateManager.Instance.AcceptMessage((BaseGameStateMessage)messageIn);
+        }
+        else if (messageIn is BasePlayerMessage)
         {
             PlayerDataManager.Instance.AcceptMessage((BasePlayerMessage)messageIn);
         }

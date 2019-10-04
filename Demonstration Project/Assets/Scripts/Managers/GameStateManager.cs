@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameStateManager : ScriptableObject, IAcceptsMessages<BaseMessage>
+public class GameStateManager : ScriptableObject, IAcceptsMessages<BaseGameStateMessage>
 {
 
     private static GameStateManager _instance = null;
@@ -49,9 +49,17 @@ public class GameStateManager : ScriptableObject, IAcceptsMessages<BaseMessage>
         }
     }
 
-    public void AcceptMessage(BaseMessage messageIn)
+    private void togglePause()
     {
-        throw new System.NotImplementedException();
+        IsPaused = !IsPaused;
+    }
+
+    public void AcceptMessage(BaseGameStateMessage messageIn)
+    {
+        if (messageIn is MsgGaStTogglePause)
+        {
+            togglePause();
+        }
     }
 
     // Update is called once per frame
