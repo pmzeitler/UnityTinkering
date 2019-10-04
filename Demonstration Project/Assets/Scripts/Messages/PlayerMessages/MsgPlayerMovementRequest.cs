@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MsgPlayerMovementRequest : BasePlayerMessage {
+public class MsgPlayerMovementRequest : BasePlayerControlMessage {
 
     public Vector2 StickPosition { get; private set; }
     public bool MovingHorizontal { get; private set; }

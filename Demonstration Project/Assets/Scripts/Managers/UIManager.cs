@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class UIManager : ScriptableObject, IAcceptsMessages<WindowMessage> {
+public class UIManager : ScriptableObject, IAcceptsMessages<BaseUIMessage> {
 
     public static UIManager _instance;
 
@@ -76,10 +76,8 @@ public class UIManager : ScriptableObject, IAcceptsMessages<WindowMessage> {
 		
 	}
 
-    public void AcceptMessage(WindowMessage messageIn)
+    private void processWindowMessage(WindowMessage messageIn)
     {
-        Debug.Log("UI Received " + messageIn.GetType().Name + " message " + messageIn.UUID.ToString() + "; preparing to render");
-
         GameObject newWindow = (GameObject)Instantiate(Resources.Load("UI Prefabs/BaseDialogBox"), UICanvas.transform);
         BaseAutoDestructComponent badc = newWindow.GetComponent<BaseAutoDestructComponent>();
         if (badc != null)
@@ -91,6 +89,17 @@ public class UIManager : ScriptableObject, IAcceptsMessages<WindowMessage> {
         if (textComponent != null)
         {
             textComponent.text = messageIn.TextToDisplay;
+        }
+    }
+
+
+    public void AcceptMessage(BaseUIMessage messageIn)
+    {
+        Debug.Log("UI Received " + messageIn.GetType().Name + " message " + messageIn.UUID.ToString() + "; preparing to render");
+
+        if (messageIn is WindowMessage)
+        {
+            processWindowMessage((WindowMessage)messageIn);
         }
     }
 }

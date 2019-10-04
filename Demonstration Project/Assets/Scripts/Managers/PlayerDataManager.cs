@@ -38,13 +38,10 @@ public class PlayerDataManager : ScriptableObject, IAcceptsMessages<BasePlayerMe
 
     public void AcceptMessage(BasePlayerMessage messageIn)
     {
-        if(messageIn is MsgPlayerSpawnInteraction)
+        if(messageIn is BasePlayerControlMessage)
         {
-            this._playerController.AcceptMessage(messageIn);
-        } else if (messageIn is MsgPlayerMovementRequest)
-        {
-            this._playerController.AcceptMessage(messageIn);
-        }
+            this._playerController.AcceptMessage((BasePlayerControlMessage)messageIn);
+        } 
     }
 
     // Use this for initialization

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class MsgPlayerSpawnInteraction : BasePlayerMessage
+public class MsgPlayerSpawnInteraction : BasePlayerControlMessage
 {
 
     public MsgPlayerSpawnInteraction() : base(null)

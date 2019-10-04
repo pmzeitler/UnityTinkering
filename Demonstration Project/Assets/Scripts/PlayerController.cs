@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessages<BasePlayerMessage>
+public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessages<BasePlayerControlMessage>
 {
     public Transform interactionCircle;
     //private float velocity = 10;
@@ -33,13 +33,13 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
 
     public Direction facingDirection { get; private set; }
 
-    private List<BasePlayerMessage> messageQueue;
+    private List<BasePlayerControlMessage> messageQueue;
 
     // Use this for initialization
     void Start()
     {
         this.facingDirection = Direction.NORTH;
-        this.messageQueue = new List<BasePlayerMessage>();
+        this.messageQueue = new List<BasePlayerControlMessage>();
     }
 
     protected override void Awake()
@@ -273,7 +273,7 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
         this.GetComponent<Rigidbody2D>().velocity = newVelocity;
     }
 
-    public void AcceptMessage(BasePlayerMessage messageIn)
+    public void AcceptMessage(BasePlayerControlMessage messageIn)
     {
         this.queueMessage(messageIn);
     }
@@ -288,20 +288,20 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
         gameObject.GetComponent<Animator>().enabled = true;
     }
 
-    public void queueMessage(BasePlayerMessage messageIn)
+    public void queueMessage(BasePlayerControlMessage messageIn)
     {
         messageQueue.Add(messageIn);
     }
 
-    public void processMessages(ICollection<BasePlayerMessage> messages)
+    public void processMessages(ICollection<BasePlayerControlMessage> messages)
     {
         if (messages.Count < 1)
         {
             return;
         }
         int messagesProcessed = 0;
-        List<BasePlayerMessage> clearThese = new List<BasePlayerMessage>();
-        foreach (BasePlayerMessage messageIn in messages)
+        List<BasePlayerControlMessage> clearThese = new List<BasePlayerControlMessage>();
+        foreach (BasePlayerControlMessage messageIn in messages)
         {
             bool messageCleared = true;
             if (messageIn is MsgPlayerSpawnInteraction)
@@ -326,7 +326,7 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
         }
         //Debug.Log("PlayerController processed " + messagesProcessed + " of " + messages.Count + " msgs this frame; " + clearThese.Count + " to clear");
 
-        foreach (BasePlayerMessage messageOut in clearThese)
+        foreach (BasePlayerControlMessage messageOut in clearThese)
         {
             messages.Remove(messageOut);
         }

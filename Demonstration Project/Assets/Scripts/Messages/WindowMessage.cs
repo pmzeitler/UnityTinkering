@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class WindowMessage : BaseMessage
+public class WindowMessage : BaseUIMessage
 {
     private string textToDisplay;
     private int messageDuration;
