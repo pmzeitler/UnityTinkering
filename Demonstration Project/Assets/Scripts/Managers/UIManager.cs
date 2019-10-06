@@ -9,6 +9,9 @@ public class UIManager : ScriptableObject, IAcceptsMessages<BaseUIMessage> {
     public static UIManager _instance;
 
     private GameObject UICanvas;
+    private GameObject ConSenseInteractionIcon;
+
+    private int _interactionZoneCount = 0;
 
     public static UIManager Instance
     {
@@ -36,6 +39,7 @@ public class UIManager : ScriptableObject, IAcceptsMessages<BaseUIMessage> {
             _instance = this;
             Debug.Log("UIManager created");
             UICanvas = FindByName("UICanvas", SceneManager.GetActiveScene().GetRootGameObjects());
+            ConSenseInteractionIcon = UICanvas.transform.Find("ContextSensitiveIndicator").gameObject;
             if (UICanvas == null)
             {
                 Debug.Log("Could not find a UICanvas to draw to");
@@ -93,6 +97,27 @@ public class UIManager : ScriptableObject, IAcceptsMessages<BaseUIMessage> {
     }
 
 
+    public void processContextSensitiveToggleMessage(MsgUiConSenseInAdjust messageIn)
+    {
+
+        if (messageIn.Increase)
+        {
+            _interactionZoneCount++;
+        } else
+        {
+            _interactionZoneCount--;
+        }
+
+        if (_interactionZoneCount > 0)
+        {
+            ConSenseInteractionIcon.SetActive(true);
+        } else
+        {
+            _interactionZoneCount = 0;
+            ConSenseInteractionIcon.SetActive(false);
+        }
+    }
+
     public void AcceptMessage(BaseUIMessage messageIn)
     {
         Debug.Log("UI Received " + messageIn.GetType().Name + " message " + messageIn.UUID.ToString() + "; preparing to render");
@@ -100,6 +125,9 @@ public class UIManager : ScriptableObject, IAcceptsMessages<BaseUIMessage> {
         if (messageIn is WindowMessage)
         {
             processWindowMessage((WindowMessage)messageIn);
+        } else if (messageIn is MsgUiConSenseInAdjust)
+        {
+            processContextSensitiveToggleMessage((MsgUiConSenseInAdjust)messageIn);
         }
     }
 }

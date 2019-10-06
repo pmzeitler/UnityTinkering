@@ -27,9 +27,9 @@ public class MessagingManager : ScriptableObject, IAcceptsMessages<BaseMessage> 
     public void AcceptMessage(BaseMessage messageIn)
     {
         //Debug.Log("Received " + messageIn.GetType().Name + " message " + messageIn.UUID.ToString() + "; preparing to route");
-        if (messageIn is WindowMessage)
+        if (messageIn is BaseUIMessage)
         {
-            UIManager.Instance.AcceptMessage((WindowMessage)messageIn);
+            UIManager.Instance.AcceptMessage((BaseUIMessage)messageIn);
         }
         else if  (messageIn is BaseGameStateMessage)
         {
