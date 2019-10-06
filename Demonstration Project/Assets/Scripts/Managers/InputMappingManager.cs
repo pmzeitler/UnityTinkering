@@ -72,6 +72,12 @@ public class InputMappingManager : ScriptableObject {
             MappingStructure[gameState][KeyCode.JoystickButton8] = MappingStructure[gameState][KeyCode.P];
         }
 
+        MappingStructure[GameState.IN_GAMEPLAY][KeyCode.I] = new ActionSlotExecuteRequestAction(SetActionSlot.TOP);
+        MappingStructure[GameState.IN_GAMEPLAY][KeyCode.K] = new ActionSlotExecuteRequestAction(SetActionSlot.RIGHT);
+        MappingStructure[GameState.IN_GAMEPLAY][KeyCode.M] = new ActionSlotExecuteRequestAction(SetActionSlot.BOTTOM);
+        MappingStructure[GameState.IN_GAMEPLAY][KeyCode.J] = new ActionSlotExecuteRequestAction(SetActionSlot.LEFT);
+        MappingStructure[GameState.IN_GAMEPLAY][KeyCode.U] = new ActionSlotExecuteRequestAction(SetActionSlot.LEFT_SHOULDER);
+        MappingStructure[GameState.IN_GAMEPLAY][KeyCode.O] = new ActionSlotExecuteRequestAction(SetActionSlot.RIGHT_SHOULDER);
 
     }
 
