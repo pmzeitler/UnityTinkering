@@ -48,6 +48,10 @@ public class PlayerDataManager : ScriptableObject, IAcceptsMessages<BasePlayerMe
         {
             this.HandleExecuteActionSlotMessage((MsgPlayerExecuteSetAction)messageIn);
         }
+        else
+        {
+            Debug.Log("PlayerDataManager Received " + messageIn.GetType().Name + " message, but no handler is established");
+        }
     }
 
     // Use this for initialization

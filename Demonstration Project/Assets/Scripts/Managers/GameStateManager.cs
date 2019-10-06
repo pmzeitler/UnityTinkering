@@ -60,6 +60,10 @@ public class GameStateManager : ScriptableObject, IAcceptsMessages<BaseGameState
         {
             togglePause();
         }
+        else
+        {
+            Debug.Log("GameStateManager Received " + messageIn.GetType().Name + " message, but no handler is established");
+        }
     }
 
     // Update is called once per frame

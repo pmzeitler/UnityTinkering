@@ -303,6 +303,7 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
             }
             else
             {
+                Debug.Log("PlayerController received " + messageIn.GetType().Name + " message, but no handler is established");
                 messageCleared = false;
             }
 

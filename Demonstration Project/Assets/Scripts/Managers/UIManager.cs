@@ -120,7 +120,7 @@ public class UIManager : ScriptableObject, IAcceptsMessages<BaseUIMessage> {
 
     public void AcceptMessage(BaseUIMessage messageIn)
     {
-        Debug.Log("UI Received " + messageIn.GetType().Name + " message " + messageIn.UUID.ToString() + "; preparing to render");
+        
 
         if (messageIn is WindowMessage)
         {
@@ -128,6 +128,9 @@ public class UIManager : ScriptableObject, IAcceptsMessages<BaseUIMessage> {
         } else if (messageIn is MsgUiConSenseInAdjust)
         {
             processContextSensitiveToggleMessage((MsgUiConSenseInAdjust)messageIn);
+        } else
+        {
+            Debug.Log("UIManager Received " + messageIn.GetType().Name + " message, but no handler is established");
         }
     }
 }
