@@ -33,13 +33,17 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
 
     public Direction facingDirection { get; private set; }
 
-    private List<BasePlayerControlMessage> messageQueue;
+    private Dictionary<ControlStep, List<BasePlayerControlMessage>> messageQueues;
 
     // Use this for initialization
     void Start()
     {
         this.facingDirection = Direction.NORTH;
-        this.messageQueue = new List<BasePlayerControlMessage>();
+        this.messageQueues = new Dictionary<ControlStep, List<BasePlayerControlMessage>>();
+        messageQueues[ControlStep.FIRST] = new List<BasePlayerControlMessage>();
+        messageQueues[ControlStep.GENERAL] = new List<BasePlayerControlMessage>();
+        messageQueues[ControlStep.LAST] = new List<BasePlayerControlMessage>();
+
     }
 
     protected override void Awake()
@@ -58,9 +62,9 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
         //TODO: move this to an InputController object
         InputMappingManager.Instance.CheckUserInput();
 
-        processMessages(messageQueue);
-
-
+        processMessages(messageQueues[ControlStep.FIRST]);
+        processMessages(messageQueues[ControlStep.GENERAL]);
+        processMessages(messageQueues[ControlStep.LAST]);
     }
 
 
@@ -277,7 +281,7 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
 
     public void queueMessage(BasePlayerControlMessage messageIn)
     {
-        messageQueue.Add(messageIn);
+        messageQueues[messageIn.ControlStep].Add(messageIn);
     }
 
     public void processMessages(ICollection<BasePlayerControlMessage> messages)
@@ -303,7 +307,7 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
             }
             else
             {
-                Debug.Log("PlayerController received " + messageIn.GetType().Name + " message, but no handler is established");
+                Debug.Log("PlayerController received " + messageIn.GetType().Name + " message during " + messageIn.ControlStep + " step, but no handler is established");
                 messageCleared = false;
             }
 
@@ -318,15 +322,6 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
         {
             messages.Remove(messageOut);
         }
-        /*
-        if (messages.Count > 0)
-        {
-            Debug.Log("Messages cleared; PlayerController queue still has " + messages.Count + " messages");
-            foreach (BasePlayerMessage messageIn in messages)
-            {
-                Debug.Log("Message held: " + messageIn.GetType().Name);
-            }
-        }
-        */
+
     }
 }
