@@ -39,11 +39,15 @@ public class BasicNPCInteractionScript : BaseControllerObject
             {
                 messenger.AcceptMessage(new WindowMessage(gameObject, TextToDisplay, COUNTDOWN_START));
             }
+
+            /*
             else if (collision.gameObject.tag == "Player")
             {
                 Debug.Log("playerin");
                 messenger.AcceptMessage(new MsgUiConSenseInAdjust(gameObject, true));
             }
+
+            */
         }
     }
 
@@ -51,10 +55,12 @@ public class BasicNPCInteractionScript : BaseControllerObject
     {
         if (!IsPaused)
         {
+            /*
             if (collision.gameObject.tag == "Player")
             {
                 messenger.AcceptMessage(new MsgUiConSenseInAdjust(gameObject, false));
             }
+            */
         }
     }
 }

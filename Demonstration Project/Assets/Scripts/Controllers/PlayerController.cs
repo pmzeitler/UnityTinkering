@@ -71,7 +71,7 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
 
     private void SpawnInteractorCheck()
     {
-        Vector3 instantiateLocation = this.GetComponent<Transform>().position;
+        Vector3 instantiateLocation = gameObject.transform.position;
         switch (playerData.FacingDirection)
         {
             case Direction.NORTH:
@@ -106,6 +106,45 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
         }
         Instantiate(interactionCircle, instantiateLocation, Quaternion.identity);
 
+    }
+
+    private void AdjustContextCheckCircle()
+    {
+        Vector3 instantiateLocation = gameObject.transform.position;
+        switch (playerData.FacingDirection)
+        {
+            case Direction.NORTH:
+                instantiateLocation.y += this.GetComponent<Collider2D>().bounds.size.y;
+                break;
+            case Direction.SOUTH:
+                instantiateLocation.y -= this.GetComponent<Collider2D>().bounds.size.y;
+                break;
+            case Direction.EAST:
+                instantiateLocation.x += this.GetComponent<Collider2D>().bounds.size.x;
+                break;
+            case Direction.WEST:
+                instantiateLocation.x -= this.GetComponent<Collider2D>().bounds.size.x;
+                break;
+            case Direction.NORTHEAST:
+                instantiateLocation.y += (this.GetComponent<Collider2D>().bounds.size.y * DIAGONAL_RATIO);
+                instantiateLocation.x += (this.GetComponent<Collider2D>().bounds.size.x * DIAGONAL_RATIO);
+                break;
+            case Direction.NORTHWEST:
+                instantiateLocation.y += (this.GetComponent<Collider2D>().bounds.size.y * DIAGONAL_RATIO);
+                instantiateLocation.x -= (this.GetComponent<Collider2D>().bounds.size.x * DIAGONAL_RATIO);
+                break;
+            case Direction.SOUTHEAST:
+                instantiateLocation.y -= (this.GetComponent<Collider2D>().bounds.size.y * DIAGONAL_RATIO);
+                instantiateLocation.x += (this.GetComponent<Collider2D>().bounds.size.x * DIAGONAL_RATIO);
+                break;
+            case Direction.SOUTHWEST:
+                instantiateLocation.y -= (this.GetComponent<Collider2D>().bounds.size.y * DIAGONAL_RATIO);
+                instantiateLocation.x -= (this.GetComponent<Collider2D>().bounds.size.x * DIAGONAL_RATIO);
+                break;
+
+        }
+        //Debug.Log("ContextCheckZone is being adjusted");
+        gameObject.transform.Find("ContextCheckZone").position = instantiateLocation;
     }
 
     private void AdjustFacing(float h, float v, bool movingHorizontal, bool movingVertical)
@@ -195,7 +234,150 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
         }
         playerData.MovingDirection = facingDirection;
         playerData.FacingDirection = facingDirection;
+        AdjustContextCheckCircle();
     }
+
+    private void forceFacing(Direction? faceThis)
+    {
+        if(faceThis == null)
+        {
+            return;
+        }
+        string animationTarget = "Moving_";
+        switch (faceThis)
+        {
+            case Direction.EAST:
+                animationTarget += "E";
+                break;
+            case Direction.NORTHEAST:
+                animationTarget += "NE";
+                break;
+            case Direction.SOUTHEAST:
+                animationTarget += "SE";
+                break;
+            case Direction.NORTH:
+                animationTarget += "N";
+                break;
+            case Direction.SOUTH:
+                animationTarget += "S";
+                break;
+            case Direction.WEST:
+                animationTarget += "W";
+                break;
+            case Direction.NORTHWEST:
+                animationTarget += "NW";
+                break;
+            case Direction.SOUTHWEST:
+                animationTarget += "SW";
+                break;
+        }
+        animator.SetTrigger(animationTarget);
+        playerData.FacingDirection = (Direction)faceThis;
+        playerData.MovingDirection = (Direction)faceThis;
+        AdjustContextCheckCircle();
+
+    }
+
+    private bool CheckIfAllSame(params bool[] values)
+    {
+        bool retval = true;
+        bool checkAgainst = values[0];
+        foreach (bool val in values)
+        {
+            if (checkAgainst ^ val)
+            {
+                retval = false;
+                break;
+            }
+        }
+
+        return retval;
+    }
+
+    private Direction? DetermineFacingDirection(Vector2 targetPosition, bool faceAway = false)
+    {
+        Direction? retval = null;
+
+        Vector2 myPosition = gameObject.transform.position;
+
+        bool north = false;
+        bool south = false;
+        bool east = false;
+        bool west = false;
+
+        if (myPosition.x > targetPosition.x)
+        {
+            west = true;
+        } else if (myPosition.x < targetPosition.x)
+        {
+            east = true;
+        }
+
+        if (myPosition.y > targetPosition.y)
+        {
+            south = true;
+        }
+        else if (myPosition.y < targetPosition.y)
+        {
+            north = true;
+        }
+
+        //Debug.Log("Discovered directions: N-" + north + " S-" + south + " E-" + east + " W-" + west);
+
+        if (faceAway)
+        {
+            north = !north;
+            south = !south;
+            east = !east;
+            west = !west;
+        }
+
+        //if they're all the same, the target is right on top of me & no facing should change
+        if (!CheckIfAllSame(north, south, east, west))
+        {
+            if (north && !south)
+            {
+                if (east && !west)
+                {
+                    retval = Direction.NORTHEAST;
+                } else  if (west && !east)
+                {
+                    retval = Direction.NORTHWEST;
+                } else
+                {
+                    retval = Direction.NORTH;
+                }
+            } else if (south && !north)
+            {
+                if (east && !west)
+                {
+                    retval = Direction.SOUTHEAST;
+                }
+                else if (west && !east)
+                {
+                    retval = Direction.SOUTHWEST;
+                }
+                else
+                {
+                    retval = Direction.SOUTH;
+                }
+            } else if (east && !west)
+            {
+                retval = Direction.EAST;
+            }
+            else if (west && !east)
+            {
+                retval = Direction.WEST;
+            }
+        } else
+        {
+           // Debug.Log("All identical directions: N-" + north + " S-" + south + " E-" + east + " W-" + west);
+        }
+
+        return retval;
+    }
+
+
 
     private void handleAccelDecel(bool moving, float direction, ref float currentVelocity, ref float acceleration)
     {
@@ -261,6 +443,14 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
         this.GetComponent<Rigidbody2D>().velocity = newVelocity;
     }
 
+    private void HandleFacingRequest(MsgPlayerFacingRequest messageIn)
+    {
+        //Debug.Log("Attempting to face object at " + messageIn.OriginObject.transform.position + "; player position is " + gameObject.transform.position);
+        Direction? faceThis = DetermineFacingDirection(messageIn.OriginObject.transform.position, messageIn.FaceAway);
+        //Debug.Log("Facing direction should be " + faceThis);
+        forceFacing(faceThis);
+    }
+
     public void AcceptMessage(BasePlayerControlMessage messageIn)
     {
         if (!IsPaused)
@@ -304,6 +494,11 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
                 HandleMovement(((MsgPlayerMovementRequest)messageIn).StickPosition, ((MsgPlayerMovementRequest)messageIn).MovingHorizontal, ((MsgPlayerMovementRequest)messageIn).MovingVertical);
 
                 messagesProcessed++;
+            } else if (messageIn is MsgPlayerFacingRequest)
+            {
+                //TODO: This is temporarily disabled
+                //HandleFacingRequest((MsgPlayerFacingRequest)messageIn);
+                messagesProcessed++;
             }
             else
             {
@@ -324,4 +519,33 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
         }
 
     }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (!IsPaused)
+        {
+            if (collision.gameObject.tag.StartsWith("NPC"))
+            {
+                messenger.AcceptMessage(new MsgUiConSenseInAdjust(collision.gameObject, true));
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (!IsPaused)
+        {
+            if (collision.gameObject.tag.StartsWith("NPC"))
+            {
+                messenger.AcceptMessage(new MsgUiConSenseInAdjust(collision.gameObject, false));
+            }
+        }
+    }
+
+
+
+
+
+
 }

@@ -111,6 +111,8 @@ public class UIManager : ScriptableObject, IAcceptsMessages<BaseUIMessage> {
         if (_interactionZoneCount > 0)
         {
             ConSenseInteractionIcon.SetActive(true);
+            MessagingManager.Instance.AcceptMessage(new MsgPlayerFacingRequest(messageIn.OriginObject));
+
         } else
         {
             _interactionZoneCount = 0;
