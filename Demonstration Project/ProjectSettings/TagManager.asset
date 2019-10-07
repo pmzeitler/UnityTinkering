@@ -4,8 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - EyeCollider
   - InteractionCircle
+  - NPC
   layers:
   - Default
   - TransparentFX
@@ -55,8 +55,14 @@ TagManager:
   - name: TileLayer Walls
     uniqueID: 1381624019
     locked: 0
+  - name: NPCs
+    uniqueID: 1345106457
+    locked: 0
   - name: Player Sprite
     uniqueID: 596990303
+    locked: 0
+  - name: Projectiles
+    uniqueID: 1631346211
     locked: 0
   - name: TileLayer Floor FG Flavor
     uniqueID: 2693678285
