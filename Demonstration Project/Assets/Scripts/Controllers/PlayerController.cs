@@ -35,11 +35,17 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
 
     private Dictionary<ControlStep, List<BasePlayerControlMessage>> messageQueues;
 
+    private List<GameObject> contextSensitiveTargets;
+
+
+
+
     // Use this for initialization
     void Start()
     {
         this.facingDirection = Direction.NORTH;
         this.messageQueues = new Dictionary<ControlStep, List<BasePlayerControlMessage>>();
+        this.contextSensitiveTargets = new List<GameObject>();
         messageQueues[ControlStep.FIRST] = new List<BasePlayerControlMessage>();
         messageQueues[ControlStep.GENERAL] = new List<BasePlayerControlMessage>();
         messageQueues[ControlStep.LAST] = new List<BasePlayerControlMessage>();
@@ -527,7 +533,7 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
         {
             if (collision.gameObject.tag.StartsWith("NPC"))
             {
-                messenger.AcceptMessage(new MsgUiConSenseInAdjust(collision.gameObject, true));
+                AdjustContextSensitive(collision.gameObject, true);
             }
         }
     }
@@ -538,11 +544,36 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
         {
             if (collision.gameObject.tag.StartsWith("NPC"))
             {
-                messenger.AcceptMessage(new MsgUiConSenseInAdjust(collision.gameObject, false));
+                AdjustContextSensitive(collision.gameObject, false);
             }
         }
     }
 
+
+    private void AdjustContextSensitive(GameObject gameObject, bool increase)
+    {
+        if (increase)
+        {
+            if (!(contextSensitiveTargets.Contains(gameObject)))
+            {
+                contextSensitiveTargets.Add(gameObject);
+            }
+        } else
+        {
+            if (contextSensitiveTargets.Contains(gameObject))
+            {
+                contextSensitiveTargets.Remove(gameObject);
+            }
+        }
+
+        if (contextSensitiveTargets.Count > 0)
+        {
+            messenger.AcceptMessage(new MsgUiConSenseInAdjust(gameObject, true));
+        } else
+        {
+            messenger.AcceptMessage(new MsgUiConSenseInAdjust(gameObject, false));
+        }
+    }
 
 
 

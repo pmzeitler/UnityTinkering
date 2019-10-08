@@ -3,11 +3,11 @@ using System.Collections;
 
 public class MsgUiConSenseInAdjust : BaseUIMessage
 {
-    public bool Increase { get; private set; }
+    public bool Activate { get; private set; }
 
-    public MsgUiConSenseInAdjust(GameObject originObject, bool increase) : base(originObject)
+    public MsgUiConSenseInAdjust(GameObject originObject, bool activate) : base(originObject)
     {
-        Increase = increase;
+        Activate = activate;
     }
 
 }

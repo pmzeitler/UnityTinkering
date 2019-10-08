@@ -100,22 +100,13 @@ public class UIManager : ScriptableObject, IAcceptsMessages<BaseUIMessage> {
     public void processContextSensitiveToggleMessage(MsgUiConSenseInAdjust messageIn)
     {
 
-        if (messageIn.Increase)
-        {
-            _interactionZoneCount++;
-        } else
-        {
-            _interactionZoneCount--;
-        }
-
-        if (_interactionZoneCount > 0)
+        if (messageIn.Activate)
         {
             ConSenseInteractionIcon.SetActive(true);
-            MessagingManager.Instance.AcceptMessage(new MsgPlayerFacingRequest(messageIn.OriginObject));
+            //MessagingManager.Instance.AcceptMessage(new MsgPlayerFacingRequest(messageIn.OriginObject));
 
         } else
         {
-            _interactionZoneCount = 0;
             ConSenseInteractionIcon.SetActive(false);
         }
     }
