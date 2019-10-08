@@ -85,6 +85,15 @@ public class PlayerDataManager : ScriptableObject, IAcceptsMessages<BasePlayerMe
     {
         //TODO actually execute the actions
         Debug.Log("Received " + messageIn.GetType().Name + " message for Slot:" + messageIn.ActionSlot);
+        if (_playerController.InContextRange && (messageIn.ActionSlot == InputMappingManager.Instance.ContextReplacement) )
+        {
+            Debug.Log("Intercepting Normal " + messageIn.ActionSlot + " action to perform context-sensitive actions");
+        } else
+        {
+
+        }
+
+
     }
 
 

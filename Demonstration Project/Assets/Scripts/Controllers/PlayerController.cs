@@ -37,7 +37,13 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
 
     private List<GameObject> contextSensitiveTargets;
 
-
+    public bool InContextRange
+    {
+        get
+        {
+            return (contextSensitiveTargets.Count > 0);
+        }
+    }
 
 
     // Use this for initialization
@@ -525,7 +531,6 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
         }
 
     }
-
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

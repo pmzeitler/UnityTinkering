@@ -12,6 +12,8 @@ public class InputMappingManager : ScriptableObject {
     private bool useSticks = false;
     private const float AXIS_DEAD_ZONE = 0.15f;
 
+    public SetActionSlot ContextReplacement { get; private set; }
+
     public static InputMappingManager Instance
     {
         get
@@ -78,6 +80,8 @@ public class InputMappingManager : ScriptableObject {
         MappingStructure[GameState.IN_GAMEPLAY][KeyCode.J] = new ActionSlotExecuteRequestAction(SetActionSlot.LEFT);
         MappingStructure[GameState.IN_GAMEPLAY][KeyCode.U] = new ActionSlotExecuteRequestAction(SetActionSlot.LEFT_SHOULDER);
         MappingStructure[GameState.IN_GAMEPLAY][KeyCode.O] = new ActionSlotExecuteRequestAction(SetActionSlot.RIGHT_SHOULDER);
+
+        ContextReplacement = SetActionSlot.BOTTOM;
 
     }
 
@@ -157,16 +161,16 @@ public class InputMappingManager : ScriptableObject {
             {
                 if(actDown)
                 {
-                    Debug.Log("STARTING ACTION " + checkMe.Value.ToString());
+                    //Debug.Log("STARTING ACTION " + checkMe.Value.ToString());
                     checkMe.Value.StartAction();
                 } else
                 {
-                    Debug.Log("HOLDING ACTION " + checkMe.Value.ToString());
+                    //Debug.Log("HOLDING ACTION " + checkMe.Value.ToString());
                     checkMe.Value.HeldAction();
                 }
             } else if (actUp)
             {
-                Debug.Log("ENDING ACTION " + checkMe.Value.ToString());
+                //Debug.Log("ENDING ACTION " + checkMe.Value.ToString());
                 checkMe.Value.EndAction();
             }
         }
