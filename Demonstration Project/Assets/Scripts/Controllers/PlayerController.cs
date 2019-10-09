@@ -559,13 +559,13 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
     {
         if (increase)
         {
-            if (!(contextSensitiveTargets.Contains(gameObject)))
+            if (checkIfGameObjectIsInteractible(gameObject) && !(contextSensitiveTargets.Contains(gameObject)))
             {
                 contextSensitiveTargets.Add(gameObject);
             }
         } else
         {
-            if (contextSensitiveTargets.Contains(gameObject))
+            if (checkIfGameObjectIsInteractible(gameObject) && contextSensitiveTargets.Contains(gameObject))
             {
                 contextSensitiveTargets.Remove(gameObject);
             }
@@ -581,7 +581,50 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
     }
 
 
+    private bool checkIfGameObjectIsInteractible(GameObject checkMe)
+    {
+        BasicNPCInteractionScript bco = checkMe.GetComponentInChildren<BasicNPCInteractionScript>();
+        if (bco is IInteractible)
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
 
+    public void PerformContextSensitive()
+    {
+        if (contextSensitiveTargets.Count == 0)
+        {
+            Debug.Log("Asked to execute context sensitive but there are no context sensitive items in range");
+        }
+        else if (contextSensitiveTargets.Count == 1)
+        {
+            executeSingleInteractible(contextSensitiveTargets[0]);
+        }
+        else
+        {
+            Debug.Log("TODO: Asked to execute context sensitive but there are multiple context sensitive items in range");
+        }
+    }
 
+    private void executeSingleInteractible(GameObject executeMe)
+    {
+        if (!checkIfGameObjectIsInteractible(executeMe))
+        {
+            return;
+        } else
+        {
+            BasicNPCInteractionScript bco = executeMe.GetComponentInChildren<BasicNPCInteractionScript>();
+            if (bco is IInteractible)
+            {
+                ((IInteractible)bco).DoInteract(gameObject);
+            } else
+            {
+                return;
+            }
+        }
+    }
 
 }

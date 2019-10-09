@@ -6570,15 +6570,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1401210061818516, guid: 2ee2b09d051beda45b95a1c7a00564bb, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4595199311085042, guid: 2ee2b09d051beda45b95a1c7a00564bb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1075.4
+      value: -875
       objectReference: {fileID: 0}
     - target: {fileID: 4595199311085042, guid: 2ee2b09d051beda45b95a1c7a00564bb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 361
+      value: 476.9
       objectReference: {fileID: 0}
     - target: {fileID: 4595199311085042, guid: 2ee2b09d051beda45b95a1c7a00564bb, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6629,6 +6629,11 @@ PrefabInstance:
       propertyPath: textBoxObj
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 114630977134960202, guid: 2ee2b09d051beda45b95a1c7a00564bb,
+        type: 3}
+      propertyPath: shortName
+      value: Blue NPC
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ee2b09d051beda45b95a1c7a00564bb, type: 3}
 --- !u!1001 &1193438116
@@ -6670,10 +6675,35 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 212118824925452360, guid: 2ee2b09d051beda45b95a1c7a00564bb,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.25729796
+      objectReference: {fileID: 0}
+    - target: {fileID: 212118824925452360, guid: 2ee2b09d051beda45b95a1c7a00564bb,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.9245283
+      objectReference: {fileID: 0}
+    - target: {fileID: 212118824925452360, guid: 2ee2b09d051beda45b95a1c7a00564bb,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.28161624
+      objectReference: {fileID: 0}
     - target: {fileID: 114630977134960202, guid: 2ee2b09d051beda45b95a1c7a00564bb,
         type: 3}
       propertyPath: textBoxObj
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114630977134960202, guid: 2ee2b09d051beda45b95a1c7a00564bb,
+        type: 3}
+      propertyPath: TextToDisplay
+      value: You are speaking to the green NPC.
+      objectReference: {fileID: 0}
+    - target: {fileID: 114630977134960202, guid: 2ee2b09d051beda45b95a1c7a00564bb,
+        type: 3}
+      propertyPath: shortName
+      value: Green NPC
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ee2b09d051beda45b95a1c7a00564bb, type: 3}

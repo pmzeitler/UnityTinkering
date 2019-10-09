@@ -60,8 +60,8 @@ public class InputMappingManager : ScriptableObject {
 
     private void LoadDefaultKeyMapping()
     {
-        MappingStructure[GameState.IN_GAMEPLAY][KeyCode.Space] = new SpawnInteractorAction();
-        MappingStructure[GameState.IN_GAMEPLAY][KeyCode.JoystickButton0] = MappingStructure[GameState.IN_GAMEPLAY][KeyCode.Space];
+        //MappingStructure[GameState.IN_GAMEPLAY][KeyCode.Space] = new SpawnInteractorAction();
+        //MappingStructure[GameState.IN_GAMEPLAY][KeyCode.JoystickButton0] = MappingStructure[GameState.IN_GAMEPLAY][KeyCode.Space];
 
         DirectionalKeysMappings[GameState.IN_GAMEPLAY][Direction.NORTH] = KeyCode.UpArrow;
         DirectionalKeysMappings[GameState.IN_GAMEPLAY][Direction.SOUTH] = KeyCode.DownArrow;
@@ -80,6 +80,8 @@ public class InputMappingManager : ScriptableObject {
         MappingStructure[GameState.IN_GAMEPLAY][KeyCode.J] = new ActionSlotExecuteRequestAction(SetActionSlot.LEFT);
         MappingStructure[GameState.IN_GAMEPLAY][KeyCode.U] = new ActionSlotExecuteRequestAction(SetActionSlot.LEFT_SHOULDER);
         MappingStructure[GameState.IN_GAMEPLAY][KeyCode.O] = new ActionSlotExecuteRequestAction(SetActionSlot.RIGHT_SHOULDER);
+
+        MappingStructure[GameState.IN_GAMEPLAY][KeyCode.JoystickButton0] = MappingStructure[GameState.IN_GAMEPLAY][KeyCode.M];
 
         ContextReplacement = SetActionSlot.BOTTOM;
 

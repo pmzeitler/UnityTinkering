@@ -3,11 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BasicNPCInteractionScript : BaseControllerObject
+public class BasicNPCInteractionScript : BaseControllerObject, IInteractible
 {
     public const int COUNTDOWN_START = 90;
 
+    private int cooldown = 0;
+    private const int MAX_COOLDOWN = 120;
+
     public string TextToDisplay = "You are speaking to the NPC.";
+
+    public void DoInteract(GameObject playerObject)
+    {
+        if (!IsPaused && (cooldown <= 0))
+        {
+            messenger.AcceptMessage(new WindowMessage(gameObject, TextToDisplay, COUNTDOWN_START));
+            cooldown = MAX_COOLDOWN;
+        }
+    }
+
+    public string shortName = "shortName";
+
+    public string ShortName
+    {
+        get
+        { return shortName; }
+        set
+        {
+            shortName = value;
+        }
+    }
 
     // Use this for initialization
     protected override void Awake()
@@ -29,6 +53,10 @@ public class BasicNPCInteractionScript : BaseControllerObject
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
+        if (!IsPaused && (cooldown > 0))
+        {
+            cooldown--;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
