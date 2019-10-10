@@ -10,4 +10,10 @@ https://www.sqlite.org
 
 ---
 
+Player character prototype artwork (blue-haired girl) via Gaurav Munjal/LPC Character Generator
 
+http://gaurav.munjal.us/Universal-LPC-Spritesheet-Character-Generator/
+
+https://creativecommons.org/licenses/by-sa/3.0/us/
+
+---
