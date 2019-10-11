@@ -142,7 +142,9 @@ public class InputMappingManager : ScriptableObject {
 
         DetermineMovement(ref h, ref v, ref mh, ref mv);
 
+        
         MessagingManager.Instance.AcceptMessage(new MsgPlayerMovementRequest(new Vector2(h, v), mh, mv));
+        
 
         Dictionary<KeyCode, BaseAction> currentModeMappings = MappingStructure[GameStateManager.Instance.GameState];
 

@@ -66,17 +66,28 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
         playerData.PlayerController = this;
     }
 
+    protected bool DidMove = false;
+
     // Update is called once per frame
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-        
+        DidMove = false;
+
+
         //TODO: move this to an InputController object
         InputMappingManager.Instance.CheckUserInput();
 
         processMessages(messageQueues[ControlStep.FIRST]);
         processMessages(messageQueues[ControlStep.GENERAL]);
         processMessages(messageQueues[ControlStep.LAST]);
+
+        //Debug.Log("DidMove is " + DidMove);
+
+        if (!DidMove)
+        {
+            AdjustStandingAnimation(playerData.FacingDirection);
+        }
     }
 
 
@@ -159,7 +170,7 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
         gameObject.transform.Find("ContextCheckZone").position = instantiateLocation;
     }
 
-    private void AdjustFacing(float h, float v, bool movingHorizontal, bool movingVertical)
+    private void AdjustMovingAnimation(float h, float v, bool movingHorizontal, bool movingVertical)
     {
         string triggerName = "Moving_";
 
@@ -249,38 +260,30 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
         AdjustContextCheckCircle();
     }
 
-    private void forceFacing(Direction? faceThis)
+    private void AdjustStandingAnimation(Direction? faceThis)
     {
         if(faceThis == null)
         {
             return;
         }
-        string animationTarget = "Moving_";
+        string animationTarget = "Standing_";
         switch (faceThis)
         {
             case Direction.EAST:
+            case Direction.SOUTHEAST:
                 animationTarget += "E";
                 break;
-            case Direction.NORTHEAST:
-                animationTarget += "NE";
-                break;
-            case Direction.SOUTHEAST:
-                animationTarget += "SE";
-                break;
             case Direction.NORTH:
+            case Direction.NORTHEAST:
                 animationTarget += "N";
                 break;
             case Direction.SOUTH:
+            case Direction.SOUTHWEST:
                 animationTarget += "S";
                 break;
             case Direction.WEST:
-                animationTarget += "W";
-                break;
             case Direction.NORTHWEST:
-                animationTarget += "NW";
-                break;
-            case Direction.SOUTHWEST:
-                animationTarget += "SW";
+                animationTarget += "W";
                 break;
         }
         animator.SetTrigger(animationTarget);
@@ -389,8 +392,6 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
         return retval;
     }
 
-
-
     private void handleAccelDecel(bool moving, float direction, ref float currentVelocity, ref float acceleration)
     {
         if (!moving)
@@ -445,14 +446,17 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
 
     private void HandleMovement(Vector2 movement, bool movingHorizontal, bool movingVertical)
     {
-        AdjustFacing(movement.x, movement.y, movingHorizontal, movingVertical);
-
         Vector2 newVelocity = new Vector2(this.GetComponent<Rigidbody2D>().velocity.x, this.GetComponent<Rigidbody2D>().velocity.y);
 
         handleAccelDecel(movingHorizontal, movement.x, ref newVelocity.x, ref currentAcceleration.x);
         handleAccelDecel(movingVertical, movement.y, ref newVelocity.y, ref currentAcceleration.y);
 
         this.GetComponent<Rigidbody2D>().velocity = newVelocity;
+        if ((newVelocity.x != 0.0f) || (newVelocity.y != 0.0f))
+        {
+            DidMove = true;
+            AdjustMovingAnimation(newVelocity.x, newVelocity.y, movingHorizontal, movingVertical);
+        }
     }
 
     private void HandleFacingRequest(MsgPlayerFacingRequest messageIn)
@@ -460,7 +464,7 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
         //Debug.Log("Attempting to face object at " + messageIn.OriginObject.transform.position + "; player position is " + gameObject.transform.position);
         Direction? faceThis = DetermineFacingDirection(messageIn.OriginObject.transform.position, messageIn.FaceAway);
         //Debug.Log("Facing direction should be " + faceThis);
-        forceFacing(faceThis);
+        AdjustStandingAnimation(faceThis);
     }
 
     public void AcceptMessage(BasePlayerControlMessage messageIn)
