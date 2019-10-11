@@ -129,13 +129,13 @@ public class PlayerController : BaseControllerObject, IQueuesAndProcessesMessage
                 instantiateLocation.y += this.GetComponent<Collider2D>().bounds.size.y;
                 break;
             case Direction.SOUTH:
-                instantiateLocation.y -= this.GetComponent<Collider2D>().bounds.size.y;
+                instantiateLocation.y -= (2.0f *this.GetComponent<Collider2D>().bounds.size.y);
                 break;
             case Direction.EAST:
-                instantiateLocation.x += this.GetComponent<Collider2D>().bounds.size.x;
+                instantiateLocation.x += (1.5f * this.GetComponent<Collider2D>().bounds.size.x);
                 break;
             case Direction.WEST:
-                instantiateLocation.x -= this.GetComponent<Collider2D>().bounds.size.x;
+                instantiateLocation.x -= (1.5f * this.GetComponent<Collider2D>().bounds.size.x);
                 break;
             case Direction.NORTHEAST:
                 instantiateLocation.y += (this.GetComponent<Collider2D>().bounds.size.y * DIAGONAL_RATIO);
