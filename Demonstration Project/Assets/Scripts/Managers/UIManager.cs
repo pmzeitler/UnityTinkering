@@ -11,6 +11,10 @@ public class UIManager : ScriptableObject, IAcceptsMessages<BaseUIMessage> {
     private GameObject UICanvas;
     private GameObject ConSenseInteractionIcon;
 
+    private const string CAMERA_NAME = "Main Camera";
+
+    private Camera camera = null;
+
     private int _interactionZoneCount = 0;
 
     public static UIManager Instance
@@ -44,6 +48,18 @@ public class UIManager : ScriptableObject, IAcceptsMessages<BaseUIMessage> {
             {
                 Debug.Log("Could not find a UICanvas to draw to");
             }
+            GameObject cameraObj = FindByName(CAMERA_NAME, SceneManager.GetActiveScene().GetRootGameObjects());
+            if (cameraObj != null)
+            {
+                cameraObj.TryGetComponent<Camera>(out camera);
+            } else
+            {
+                Debug.Log("Could not find a " + CAMERA_NAME + " object to search in");
+            }
+            if (camera == null)
+            {
+                Debug.Log("Could not get camera component from cameraObj");
+            }
         }
         else
         {
@@ -68,6 +84,12 @@ public class UIManager : ScriptableObject, IAcceptsMessages<BaseUIMessage> {
         }
 
         return retval;
+    }
+
+    public Camera Camera { get
+        {
+            return camera;
+        }
     }
 
     // Use this for initialization
@@ -97,7 +119,7 @@ public class UIManager : ScriptableObject, IAcceptsMessages<BaseUIMessage> {
     }
 
 
-    public void processContextSensitiveToggleMessage(MsgUiConSenseInAdjust messageIn)
+    private void processContextSensitiveToggleMessage(MsgUiConSenseInAdjust messageIn)
     {
 
         if (messageIn.Activate)
@@ -121,9 +143,51 @@ public class UIManager : ScriptableObject, IAcceptsMessages<BaseUIMessage> {
         } else if (messageIn is MsgUiConSenseInAdjust)
         {
             processContextSensitiveToggleMessage((MsgUiConSenseInAdjust)messageIn);
+        }
+        else if (messageIn is MsgUISmallSpeechBubble)
+        {
+            ProcessSpeechBubbleMessage((MsgUISmallSpeechBubble)messageIn);
         } else
         {
             Debug.Log("UIManager Received " + messageIn.GetType().Name + " message, but no handler is established");
         }
     }
+
+    private void ProcessSpeechBubbleMessage(MsgUISmallSpeechBubble messageIn)
+    {
+        GameObject newWindow = (GameObject)Instantiate(Resources.Load("UI Prefabs/SpeechBubblePrefab"), UICanvas.transform);
+        BaseAutoDestructSpeechBubble badc = newWindow.GetComponent<BaseAutoDestructSpeechBubble>();
+        if (badc != null)
+        {
+            badc.TimeToDisplay = messageIn.MessageDuration;
+            badc.TrackObject = messageIn.OriginObject;
+        }
+        GameObject textObj = newWindow.transform.Find("SpeechBubbleText").gameObject;
+        Text textComponent = textObj.GetComponent<Text>();
+        if (textComponent != null)
+        {
+            textComponent.text = messageIn.WindowMessage;
+        }
+
+        Vector2 screenPos = AdjustPositionForUIDisplay(messageIn.OriginObject.transform.position);
+
+        badc.transform.localPosition = screenPos + badc.offset;
+
+
+    }
+
+
+    public Vector2 AdjustPositionForUIDisplay(Vector2 basePosition)
+    {
+        Vector2 viewPos = camera.WorldToViewportPoint(basePosition);
+        viewPos.x -= 0.5f;
+        viewPos.y -= 0.5f;
+        Vector2 retval = new Vector2(camera.pixelWidth * viewPos.x, camera.pixelHeight * viewPos.y);
+        return retval;
+    }
+
+
+
+
+
 }

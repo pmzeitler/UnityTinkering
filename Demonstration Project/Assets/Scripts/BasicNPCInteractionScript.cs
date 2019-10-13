@@ -16,7 +16,8 @@ public class BasicNPCInteractionScript : BaseControllerObject, IInteractible
     {
         if (!IsPaused && (cooldown <= 0))
         {
-            messenger.AcceptMessage(new WindowMessage(gameObject, TextToDisplay, COUNTDOWN_START));
+            //messenger.AcceptMessage(new WindowMessage(gameObject, TextToDisplay, COUNTDOWN_START));
+            messenger.AcceptMessage(new MsgUISmallSpeechBubble(gameObject, TextToDisplay, COUNTDOWN_START));
             cooldown = MAX_COOLDOWN;
         }
     }

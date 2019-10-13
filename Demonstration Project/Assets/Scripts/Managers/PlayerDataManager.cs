@@ -83,10 +83,10 @@ public class PlayerDataManager : ScriptableObject, IAcceptsMessages<BasePlayerMe
 	
     private void HandleExecuteActionSlotMessage(MsgPlayerExecuteSetAction messageIn)
     {
-        Debug.Log("Received " + messageIn.GetType().Name + " message for Slot:" + messageIn.ActionSlot);
+        //Debug.Log("Received " + messageIn.GetType().Name + " message for Slot:" + messageIn.ActionSlot);
         if (_playerController.InContextRange && (messageIn.ActionSlot == InputMappingManager.Instance.ContextReplacement) )
         {
-            Debug.Log("Intercepting Normal " + messageIn.ActionSlot + " action to perform context-sensitive actions");
+            //Debug.Log("Intercepting Normal " + messageIn.ActionSlot + " action to perform context-sensitive actions");
             _playerController.PerformContextSensitive();
         } else
         {
