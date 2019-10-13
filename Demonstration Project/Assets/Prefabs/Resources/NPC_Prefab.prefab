@@ -61,6 +61,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TextToDisplay: You are speaking to an NPC.
+  InteractionOffset: {x: 30, y: 60}
   shortName: Prefab NPC
 --- !u!1 &1401210061818516
 GameObject:

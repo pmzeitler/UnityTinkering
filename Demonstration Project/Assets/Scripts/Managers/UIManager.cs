@@ -161,6 +161,7 @@ public class UIManager : ScriptableObject, IAcceptsMessages<BaseUIMessage> {
         {
             badc.TimeToDisplay = messageIn.MessageDuration;
             badc.TrackObject = messageIn.OriginObject;
+            badc.offset = messageIn.BubbleOffset;
         }
         GameObject textObj = newWindow.transform.Find("SpeechBubbleText").gameObject;
         Text textComponent = textObj.GetComponent<Text>();

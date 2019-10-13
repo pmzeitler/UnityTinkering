@@ -11,13 +11,14 @@ public class BasicNPCInteractionScript : BaseControllerObject, IInteractible
     private const int MAX_COOLDOWN = 120;
 
     public string TextToDisplay = "You are speaking to the NPC.";
+    public Vector2 InteractionOffset;
 
     public void DoInteract(GameObject playerObject)
     {
         if (!IsPaused && (cooldown <= 0))
         {
             //messenger.AcceptMessage(new WindowMessage(gameObject, TextToDisplay, COUNTDOWN_START));
-            messenger.AcceptMessage(new MsgUISmallSpeechBubble(gameObject, TextToDisplay, COUNTDOWN_START));
+            messenger.AcceptMessage(new MsgUISmallSpeechBubble(gameObject, TextToDisplay, COUNTDOWN_START, InteractionOffset));
             cooldown = MAX_COOLDOWN;
         }
     }
