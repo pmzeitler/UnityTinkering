@@ -11,6 +11,8 @@ public class SystemDataManager : ScriptableObject
     private static SystemDataManager _instance;
     public string Localization { get; private set; }
 
+    private string AssetPrefix { get; set; }
+
     public static SystemDataManager Instance
     {
         get
@@ -39,12 +41,13 @@ public class SystemDataManager : ScriptableObject
         {
             _instance = this;
             Localization = "en-us";
+            AssetPrefix = Application.dataPath + SystemDatabaseFileName.FILE_SEPARATOR + "Databases" + SystemDatabaseFileName.FILE_SEPARATOR;
             Debug.Log("SystemDataManager created");
-            string GameDataFile = SystemDatabaseFileName.GetFilename(SystemDatabaseFile.GAME_DATA, Localization);
+            string GameDataFile = SystemDatabaseFileName.GetFilename(SystemDatabaseFile.GAME_DATA);
             string LocalizationFile = SystemDatabaseFileName.GetFilename(SystemDatabaseFile.LOCALIZATION_BASE, Localization);
 
-            Debug.Log("GameData file: " + GameDataFile);
-            Debug.Log("Localization File: " + LocalizationFile);
+            Debug.Log("GameData file: " + AssetPrefix + GameDataFile);
+            Debug.Log("Localization File: " + AssetPrefix + LocalizationFile);
 
 
         }
