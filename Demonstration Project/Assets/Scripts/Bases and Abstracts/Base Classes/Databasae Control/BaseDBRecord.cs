@@ -12,11 +12,11 @@ public abstract class BaseDBRecord
     protected abstract string LoadSQL { get; }
     protected abstract string DeleteSQL { get; }
 
-    protected int ID { get; private set; }
+    public int ID { get; protected set; }
 
     protected abstract void _prepareSave(SqliteCommand commandIn);
     protected abstract void _prepareCreate(SqliteCommand commandIn);
-    protected abstract void _prepareLoad(SqliteCommand commandIn);
+    protected abstract void _prepareLoad(SqliteCommand commandIn, params object[] paramsIn);
     protected abstract void _prepareDelete(SqliteCommand commandIn);
 
     protected abstract void _readLoad(SqliteDataReader readerIn);
@@ -62,13 +62,13 @@ public abstract class BaseDBRecord
 
     }
 
-    public virtual void Load(int idIn)
+    public virtual void Load(params object[] paramsIn)
     {
-        ID = idIn;
+        //ID = idIn;
         SqliteCommand command = Connection.CreateCommand();
         command.CommandType = CommandType.Text;
         command.CommandText = LoadSQL;
-        _prepareLoad(command);
+        _prepareLoad(command, paramsIn);
         _readLoad(command.ExecuteReader());
     }
 
