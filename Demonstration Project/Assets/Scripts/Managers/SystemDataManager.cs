@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,7 +55,7 @@ public class SystemDataManager : ScriptableObject
             //Debug.Log("Localization File: " + AssetPrefix + LocalizationFile);
 
             //TODO: fix this
-     
+        /*
             Debug.Log("Testing DB Connection....");
             SetUpDatabase(SystemDatabaseFile.LOCALIZATION_BASE, AssetPrefix + LocalizationFile);
 
@@ -68,7 +69,7 @@ public class SystemDataManager : ScriptableObject
             dialogue2.Load("SAMPLE_TEXT_ALT");
 
             Debug.Assert(dialogue2.LocalizedText == "This is different sample text for localization.", "Did not get correct dialogue fragment for method load with params");
-          
+          */
         }
         else
         {
@@ -93,6 +94,14 @@ public class SystemDataManager : ScriptableObject
         }
         
         SqliteConnection connectionObj = (SqliteConnection) dbConnections[dbType];
+
+        if (!File.Exists(DatabaseLocation))
+        {
+            Debug.Log("Cannot find database file " + DatabaseLocation);
+        } else
+        {
+            Debug.Log("File appears to exist for " + DatabaseLocation);
+        }
 
         string sanitizedString = /* "file:" + */ SanitizeConnectionString(DatabaseLocation);
 
