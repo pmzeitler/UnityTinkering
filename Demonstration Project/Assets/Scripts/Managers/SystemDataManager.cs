@@ -54,7 +54,7 @@ public class SystemDataManager : ScriptableObject
             //Debug.Log("Localization File: " + AssetPrefix + LocalizationFile);
 
             //TODO: fix this
-            /*
+     
             Debug.Log("Testing DB Connection....");
             SetUpDatabase(SystemDatabaseFile.LOCALIZATION_BASE, AssetPrefix + LocalizationFile);
 
@@ -68,7 +68,7 @@ public class SystemDataManager : ScriptableObject
             dialogue2.Load("SAMPLE_TEXT_ALT");
 
             Debug.Assert(dialogue2.LocalizedText == "This is different sample text for localization.", "Did not get correct dialogue fragment for method load with params");
-            */
+          
         }
         else
         {
