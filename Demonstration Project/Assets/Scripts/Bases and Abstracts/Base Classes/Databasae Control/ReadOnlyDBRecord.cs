@@ -40,6 +40,11 @@ public abstract class ReadOnlyDBRecord : BaseDBRecord
         //throw new NotImplementedException();
     }
 
+    protected sealed override void _prepareDelete(SqliteCommand commandIn)
+    {
+        //throw new NotImplementedException();
+    }
+
     public sealed override void Save(SqliteTransaction transaction)
     {
         //base.Save(transaction);
