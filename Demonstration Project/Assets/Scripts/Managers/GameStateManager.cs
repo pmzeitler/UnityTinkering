@@ -40,10 +40,10 @@ public class GameStateManager : ScriptableObject, IAcceptsMessages<BaseGameState
             this.IsPaused = false;
             this.GameState = GameState.IN_GAMEPLAY;
 
-            if (SystemDataManager.Instance == null)
+            /*if (SystemDataManager.Instance == null)
             {
                 Debug.Log("Something has gone horribly wrong while instantiating SystemDataManager");
-            }
+            }*/
         }
         else
         {
